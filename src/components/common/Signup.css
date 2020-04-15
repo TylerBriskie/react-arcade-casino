@@ -1,5 +1,14 @@
-.new-user-form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#new-user-form{
+    margin-top: 3em;
+}
+
+.signup-form-input{
+    width: 300px;
+}
+
+.error-message{
+    padding-top: 1em;
+    color:red;
+    height: 36px;
+    font-size: 75%;
 }
