@@ -40,3 +40,10 @@
 .page-section-header{
   margin-top:2em;
 }
+
+.page-container{
+  display:flex;
+  flex-direction:column;
+  width: 100%;
+  align-items: center;
+}
