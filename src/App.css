@@ -47,3 +47,16 @@
   width: 100%;
   align-items: center;
 }
+
+
+/* GAME LIST */
+
+.game-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.game-card {
+
+}
