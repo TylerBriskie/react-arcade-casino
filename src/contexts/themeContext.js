@@ -5,7 +5,7 @@ export const ThemeContext = createContext();
 
 class ThemeContextProvider extends Component {
     state = {
-        theme: 'default',
+        theme: 'neonbeach',
         default: {
             base: '#ABC0B5',
             accent: '#947EB0',
