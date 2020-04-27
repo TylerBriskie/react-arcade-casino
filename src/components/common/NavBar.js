@@ -12,6 +12,7 @@ import SendIcon from '@material-ui/icons/Send';
 
 // LOCAL IMPORTS
 import './NavBar.css';
+import HeaderLogo from '../../CasinoHeaderLogo.png';
 import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
 
@@ -40,10 +41,11 @@ const NavBar = (props) => {
 
         <div className="nav-sticky-header" style={{background: base}}>
             <div className="header-logo">
-                <h2>
-                <Link to="/" style={{color: primary}}>Tyler Briskie Arcade & Casino</Link>
+                
+                <Link to="/" style={{color: primary}}>
+                    <img src={HeaderLogo}/>
+                </Link>
                     
-                </h2>
             </div>
             <Button>
                     <Link to="/arcade" style={{color: primary}}>Arcade</Link>
