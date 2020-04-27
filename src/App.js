@@ -1,29 +1,40 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 // LOCAL IMPORTS
 import NavBar from './components/common/NavBar';
 import Home from './components/common/Home';
 import Login from './components/common/Login';
 import Signup from './components/common/Signup';
-
 import './App.css';
-
-
+import ThemeContextProvider from './contexts/themeContext';
+import AuthContextProvider from './contexts/authContext';
+import AccountSettings from './components/common/AccountSettings';
+ 
+// MAIN APP
 function App() {
 
-  const ActiveUserContext = React.createContext({id: 0, display_name: "Guest", credits: 0});
-
   return (
-    <div className="App">
+    // <ThemeContextProvider>
+      <div className="App">
+        <ThemeContextProvider>
+          <AuthContextProvider>
+            <NavBar />
+            <Switch>
 
-      <NavBar />
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-      </Switch>
-    </div>
+              <Route path="/" component={Home} exact />
+              <Route path="/account" component={AccountSettings} />
+
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+            </Switch>
+          </AuthContextProvider>
+        </ThemeContextProvider>
+
+      </div>
+    // </ThemeContextProvider>
+
+
   );
 }
 

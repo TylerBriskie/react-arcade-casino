@@ -1,0 +1,22 @@
+#login-form{
+    margin-top: 3em;
+}
+
+.login-form-input{
+    width: 300px;
+    padding: 3em;
+}
+
+.error-message{
+    padding-top: 1em;
+    color:red;
+    height: 36px;
+    font-size: 75%;
+}
+
+.form-buttons-group{
+    width: 300px;
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
