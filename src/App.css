@@ -48,7 +48,6 @@
   align-items: center;
 }
 
-
 /* GAME LIST */
 
 .game-list {
@@ -56,3 +55,4 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
