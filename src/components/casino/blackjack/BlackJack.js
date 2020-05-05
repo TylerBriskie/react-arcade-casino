@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 
 // LOCAL IMPORTS
-import Player from '../../common/player/Player';
+import BlackjackPlayer from './BlackjackPlayer/BlackjackPlayer';
 import './BlackJack.css';
 
 
@@ -20,22 +20,22 @@ class BlackJack extends Component {
                 seat: 1,
                 name: 'Player One',
                 credits: 5000,
-                cards: [],
-                value: 0,
+                cards: ['3S', 'QS'],
+                value: 13,
                 hasBlackjack: false,
             }, {
                 seat: 2,
                 name: 'Player Two',
                 credits: 5000,
-                cards: [],
-                value: 0,
-                hasBlackjack: true,
+                cards: ['AD', 'KS','9H', '9H', '0S', '0C','9H', '9H', '0S', '0C'],
+                value: 11,
+                hasBlackjack: false,
             }, {
                 seat: 3,
                 name: 'Mickey Mouse',
                 credits: 100,
-                cards: [],
-                value: 22,
+                cards: ['3S', 'KD', '2H', '9H', '9H', '0S', ],
+                value: 24,
                 hasBlackjack: false,
             }],
             dealer: {
@@ -70,7 +70,7 @@ class BlackJack extends Component {
                 </h2>
                 <div className="players-container">
                 {this.state.players.map(p => 
-                    <Player 
+                    <BlackjackPlayer 
                         details={{...p}} 
                         isPlayerTurn={this.state.playerTurn === p.seat}
                         changeGamePhase={() => this.changeGamePhase}
