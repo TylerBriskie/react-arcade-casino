@@ -32,6 +32,8 @@ const Login = () => {
 
     });
     
+
+    let formErrorMessage = null;
     
     return ( 
         <div className="page-container">
@@ -56,7 +58,6 @@ const Login = () => {
                     .then(function (response) {
                         setSubmitting(false);
 
-                        console.log('logged in - ', response);
                         setAuthenticated({
                             isAuthenticated: true,
                             token: response.data
@@ -66,7 +67,8 @@ const Login = () => {
                         
                     })
                     .catch(function (error) {
-                        console.log( error);
+                        if (error){}
+
                         // if(error.response && error.response.status === 409){
                         //     currentComponent.setState({
                         //         error: {
@@ -74,11 +76,9 @@ const Login = () => {
                         //         }
 
                         //     })
-                        //     setErrors({
-                        //         email: "a user with that email exists"
-                        //     })
+                           formErrorMessage = "There was an error logging in.  Check your credentials and try again."
                         // }
-                
+                        console.log(formErrorMessage);
                         
                         setSubmitting(false);
                     });
@@ -119,14 +119,33 @@ const Login = () => {
                             }
                         </div>
                         <div className="form-buttons-group">
-                            <Button variant="contained" disabled={!dirty } type="reset">Clear</Button>
+                            <Button variant="contained" className="welschman" disabled={!dirty } type="reset">Clear</Button>
 
                             <Button variant="contained" color="primary" disabled={isSubmitting || !isValid || !dirty } type="submit">Submit</Button>
 
                         </div>
+
+                        <div className="login-error-container">
+                            {formErrorMessage === null ? 
+                                <div></div> 
+                                :
+                                (<div>
+                                    <p className="login-error-message">{formErrorMessage}</p>
+                                    
+                                    <Button variant="contained" className="margin-top" onClick={() => {console.log('resetting password')}}>
+                                        Reset Password
+                                    </Button>
+                                    
+                                </div>
+                                )
+                            }
+
+                        </div>
                     </Form>
                 )}
+                
             </Formik>
+
         </div>
      );
 }
