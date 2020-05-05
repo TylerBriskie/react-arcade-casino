@@ -46,7 +46,7 @@ const Player = props => {
     }
 
     return ( 
-        <div className="individual-player-wrapper">
+        <div className="individual-player-wrapper game-card">
             <div className="player-details">
 
             </div>

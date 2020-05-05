@@ -55,4 +55,17 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+.game-card {
+  border: solid 1px #ccc;
+  border-radius: 15px; 
+  background: #222;
+  padding: 8px;
+  margin: 8px;
+  margin-top: 24px;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 

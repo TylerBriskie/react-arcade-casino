@@ -1,14 +1,4 @@
-.game-card {
-    outline: solid 1px black; 
-    padding: 8px;
-    margin: 8px;
-    margin-top: 24px;
-    width: 250px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+
 
 p{
     margin-top: 24px;
