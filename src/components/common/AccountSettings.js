@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
-
-import { Box } from '@material-ui/core';
 
 class AccountSettings extends Component {
 

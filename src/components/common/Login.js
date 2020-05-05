@@ -1,14 +1,13 @@
 import React, {useContext} from 'react';
-import {TextField, Button, Box} from '@material-ui/core';
+import {TextField, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom'
 
 
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
 // LOCAL IMPORTS
-import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
 
 import './Login.css';

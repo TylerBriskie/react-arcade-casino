@@ -11,7 +11,6 @@ import axios from 'axios';
 import GameCard from '../common/GameCard';
 
 // CONTEXT
-import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
 
 

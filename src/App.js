@@ -12,7 +12,6 @@ import Home from './components/common/Home';
 import Login from './components/common/Login';
 import Signup from './components/common/Signup';
 import './App.css';
-// import ThemeContextProvider from './contexts/themeContext';
 import AuthContextProvider from './contexts/authContext';
 import AccountSettings from './components/common/AccountSettings';
 import CasinoHome from './components/casino/CasinoHome';
@@ -26,7 +25,6 @@ function App() {
 
 
   return (
-    // <ThemeContextProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Paper className="App" style={{height: "100vh"}}>
@@ -55,7 +53,6 @@ function App() {
 
         </ThemeProvider>
 
-    // </ThemeContextProvider>
 
 
   );
