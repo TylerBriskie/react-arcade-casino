@@ -53,7 +53,6 @@ class Signup extends Component {
         } 
 
         componentDidMount() {
-            console.log(this.context);
             // const user = this.context
             if (this.context.isAuthenticated){
                 this.setState({redirect: '/account'})
@@ -218,7 +217,7 @@ class Signup extends Component {
                                      
                 
                                             <div className="form-buttons-group">
-                                                <Button variant="contained" disabled={!dirty } type="reset">Clear</Button>
+                                                <Button variant="contained" className="form-button" disabled={!dirty } type="reset">Clear</Button>
                 
                                                 <Button variant="contained" color="primary" disabled={isSubmitting || !isValid || !dirty } type="submit">Submit</Button>
                 

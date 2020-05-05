@@ -1,5 +1,6 @@
 #new-user-form{
     margin-top: 3em;
+    width: 450px;
 }
 
 .signup-form-input{
@@ -14,8 +15,13 @@
 }
 
 .form-buttons-group{
-    width: 300px;
     display:flex;
     flex-direction:row;
     justify-content: space-between;
+
+}
+
+
+.MuiButton-contained {
+    width: 35%;
 }
