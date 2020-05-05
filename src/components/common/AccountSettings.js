@@ -16,57 +16,40 @@ class AccountSettings extends Component {
         return (
             <AuthContext.Consumer>
                 {(authContext) => (
-                    <ThemeContext.Consumer>
-                        {(themeContext) => {
-
-                            const { theme, setTheme } = themeContext;
-
-                            const {
-                                base,
-                                accent,
-                                primary,
-                                secondary,
-                                tertiary,
-                            } = themeContext[theme];
-
-                            return(
-                                <div>
-                                    <h1>
-                                        Account Settings
-                                    </h1>
+                                               
+                    <div>
+                        <h1>
+                            Account Settings
+                        </h1>
+        
+                        <hr />
+                        {/* <h4> theme </h4>
+                        <button onClick={() => setTheme('default')}>
+                            Default
+                        </button>
+                        <button onClick={() => setTheme('neonbeach')}>
+                            Neon Beach
+                        </button> */}
+                        {/* <div style={{display: 'flex', flexDirection: 'row'}}>
+                            <Box style={{backgroundColor: base, height: "60px", width: "60px"}}>
                     
-                                    <hr />
-                                    <h4> theme </h4>
-                                    <button onClick={() => setTheme('default')}>
-                                        Default
-                                    </button>
-                                    <button onClick={() => setTheme('neonbeach')}>
-                                        Neon Beach
-                                    </button>
-                                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                                        <Box style={{backgroundColor: base, height: "60px", width: "60px"}}>
-                                
-                                        </Box>
-                                        <Box style={{background: accent, height: "60px", width: "60px"}}>
-                                        
-                                        </Box>
-                                        <Box style={{background: primary, height: "60px", width: "60px"}}>
-                                        
-                                        </Box>
-                                        <Box style={{background: secondary, height: "60px", width: "60px"}}>
-                                        
-                                        </Box>
-                                        <Box style={{background: tertiary, height: "60px", width: "60px"}}>
-                                        
-                                        </Box>
-                                    </div>
-                                    
-                                </div>
-                            )
-                        }}
-                    
-
-                    </ThemeContext.Consumer> 
+                            </Box>
+                            <Box style={{background: accent, height: "60px", width: "60px"}}>
+                            
+                            </Box>
+                            <Box style={{background: primary, height: "60px", width: "60px"}}>
+                            
+                            </Box>
+                            <Box style={{background: secondary, height: "60px", width: "60px"}}>
+                            
+                            </Box>
+                            <Box style={{background: tertiary, height: "60px", width: "60px"}}>
+                            
+                            </Box>
+                        </div>
+                         */}
+                    </div>
+                
                 )}
 
 

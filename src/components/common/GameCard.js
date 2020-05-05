@@ -6,7 +6,6 @@ import { Button } from '@material-ui/core';
 
 
 // CONTEXT
-import { ThemeContext } from '../../contexts/themeContext';
 
 import './GameCard.css';
 

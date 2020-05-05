@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 // LOCAL IMPORTS
-import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
 
 // import './Login.css';

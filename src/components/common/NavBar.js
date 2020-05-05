@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -13,22 +13,33 @@ import SendIcon from '@material-ui/icons/Send';
 // LOCAL IMPORTS
 import './NavBar.css';
 import HeaderLogo from '../../CasinoHeaderLogo.png';
-import { ThemeContext } from '../../contexts/themeContext';
+// import { ThemeContext } from '../../contexts/themeContext';
 import { AuthContext } from '../../contexts/authContext';
 
-const NavBar = (props) => {
 
-    const themeContext = useContext(ThemeContext);
-    const { theme } = themeContext;
+
+const NavBar = (props) => {
+    const useStyles = makeStyles({
+        buttonStyle: {
+            color: 'red',
+        }
+    })
+    
+    
+    const classes = useStyles();
+    
+    
+    // const themeContext = useContext(ThemeContext);
+    // const { theme } = themeContext;
     const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
 
-    const {
-        base,
-        accent,
-        primary,
-        secondary,
-        tertiary,
-    } = themeContext[theme];
+    // const {
+    //     base,
+    //     accent,
+    //     primary,
+    //     secondary,
+    //     tertiary,
+    // } = themeContext[theme];
 
     const logoutUser = () => {
         setAuthenticated({
@@ -39,40 +50,43 @@ const NavBar = (props) => {
 
     return ( 
 
-        <div className="nav-sticky-header" style={{background: base}}>
+        <div className="nav-sticky-header" >
             <div className="header-logo">
                 
-                <Link to="/" style={{color: primary}}>
+                <Link to="/" >
                     <img src={HeaderLogo}/>
                 </Link>
                     
             </div>
-            <Button>
-                    <Link to="/arcade" style={{color: primary}}>Arcade</Link>
-                </Button>
-                <Button>
-                    <Link to="/casino" style={{color: primary}}>Casino</Link>
-                </Button>
-            {
-                isAuthenticated ?
-                (<React.Fragment>
-                <Button>
-                    <Link to="/account" style={{color: primary}}>Account</Link>
-                </Button>
-                <Button onClick={logoutUser}>
-                    Logout
-                </Button>
-                </React.Fragment>) :
-                (<React.Fragment>
+            <div className="nav-button-container">
                     <Button>
-                        <Link to="/signup" style={{color: primary}}>Signup</Link>
+                        <Link to="/arcade" >Arcade</Link>
                     </Button>
                     <Button>
-                        <Link to="/login" style={{color: primary}}>Login</Link>
+                        <Link to="/casino" >Casino</Link>
                     </Button>
-                </React.Fragment>
-                )
-            }
+                {
+                    isAuthenticated ?
+                    (<React.Fragment>
+                        <Button>
+                            <Link to="/account" >Account</Link>
+                        </Button>
+                        <Button onClick={logoutUser}>
+                            Logout
+                        </Button>
+                    </React.Fragment>) :
+                    (<React.Fragment>
+                        <Button>
+                            <Link to="/signup" >Signup</Link>
+                        </Button>
+                        <Button>
+                            <Link to="/login">Login</Link>
+                        </Button>
+                    </React.Fragment>
+                    )
+                }
+            </div>
+
             
 
         </div>
