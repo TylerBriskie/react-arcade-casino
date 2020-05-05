@@ -1,6 +1,6 @@
 .nav-sticky-header{
-    background: #222;
-    color: #23EaCa;
+    background: #000;
+    /* color: #23EaCa; */
     height: 100px;
     width: 100vw;
 
@@ -13,20 +13,24 @@
     color: #EAEAEA;
     background: none;
     border: none;
-    font-size: 1.5em;
+
 }
 
-.nav-sticky-header button:focus{
-    outline: none !important;
+.nav-button-container {
+    display: flex;
+    flex-direction: row;
 }
+
 
 .nav-sticky-header .header-logo {
     width: 50%;    
 }
 
-a {
-    color: pink;
+ a {
     text-decoration: none;
+}
+a:hover{
+    color: white;
 }
 
 img {
