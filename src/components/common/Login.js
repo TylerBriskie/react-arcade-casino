@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {TextField, Button, Box} from '@material-ui/core';
+import { useHistory } from 'react-router-dom'
 
 
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -13,7 +14,7 @@ import { AuthContext } from '../../contexts/authContext';
 import './Login.css';
 
 const Login = () => {
-
+    let history = useHistory();
     const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
 
     const LoginSchema = Yup.object().shape({
@@ -37,7 +38,7 @@ const Login = () => {
     
     return ( 
         <div className="page-container">
-            <h2 className="page-section-header">LOGIN</h2>
+            <h2 className="page-section-header">LOGIN</h2>            
             <Formik
                 initialValues={{            
                     email: '',
@@ -49,13 +50,10 @@ const Login = () => {
                     setSubmitting(true);
 
                     const postData = data;
-                    console.log(postData);
-                    let currentComponent = this;
-                    {/*
-                        SEND LOGIN DATA TO SERVER
-                    */ } 
+
                     axios.post(process.env.REACT_APP_API_BASE_URL+'auth/login', postData)
                     .then(function (response) {
+                        // LOGIN SUCCESS
                         setSubmitting(false);
 
                         setAuthenticated({
@@ -63,6 +61,7 @@ const Login = () => {
                             token: response.data
                         });
 
+                        history.push('/');
                        
                         
                     })
