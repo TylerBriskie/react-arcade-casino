@@ -3,5 +3,24 @@
     padding: 8px;
     height: 20vh;
     width: 20vw;
+    min-width: 240px;
+    min-height: 320px;
     margin: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.player-details {
+    align-self: flex-start;
+}
+
+.cards-container {
+    flex-grow: 3;
+    margin-top: 8px;
+}
+
+.player-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
