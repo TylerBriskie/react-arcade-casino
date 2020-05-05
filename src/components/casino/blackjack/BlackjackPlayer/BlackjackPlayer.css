@@ -1,7 +1,7 @@
 .individual-player-wrapper {
     outline: solid black 2px;
     padding: 8px;
-    height: 35vh;
+    height: 30vh;
     width: 22vw;
     min-width: 240px;
     min-height: 320px;
@@ -20,25 +20,23 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    justify-content: center;
+    flex-wrap: nowrap;
 }
 
-.big-card {
+.cards-container img {
 
-    height: 18vh;
+    /* height: 17vh;
+     */
+     height: 250px;
+     width: 175px;
 }
-.small-card {
 
-    height: 12vh;
+.not-first-card {
+    margin-left: -150px;
 }
-.big-card.not-first-card {
-    margin-left: -120px;
-}
-.small-card.not-first-card{
-    margin-left: -75px;
-
-
+.collapsed-card {
+    margin-left: -173px;
 }
 
 .player-actions {

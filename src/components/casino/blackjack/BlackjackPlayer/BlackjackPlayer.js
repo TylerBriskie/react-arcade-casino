@@ -3,6 +3,7 @@ import Fab from '@material-ui/core/Fab';
 
 // LOCAL
 import './BlackjackPlayer.css';
+import CardBack from '../../../../playing-card-back-1.png';
 
 const BlackjackPlayer = props => {
 
@@ -22,17 +23,46 @@ const BlackjackPlayer = props => {
     const renderCards = () => {
 
 
-        let useBigCards = props.details.cards.length < 7;
+        let collapseCards = props.details.cards.length > 6;
 
         let cardImgs = props.details.cards.map(c => {
-            if (props.details.cards.indexOf(c) === 0){
-                return <img className={useBigCards ? 'big-card' : 'small-card'} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+            console.log(props.details.cards.length);
+            if (collapseCards){
+                if (props.details.cards.indexOf(c) === 0 ){
+                    return <img src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                } else if (props.details.cards.indexOf(c) < (props.details.cards.length - 4) ){
+                    return <img className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                } else {
+                    return <img className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+    
+                }
             } else {
-                return <img className={`${useBigCards ? 'big-card' : 'small-card'} not-first-card`} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
-
+                if (props.details.cards.indexOf(c) === 0){
+                    return <img src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                } else {
+                    return <img className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+    
+                }
             }
+
+        
         })
         return cardImgs
+    }
+
+
+    const renderScore = () => {
+        if (props.details.value > 21){
+            console.log('player ' + props.details.seat + ' busts');
+            return (
+                <div className="player-actions">
+                    <h3>Bust!</h3>
+                </div>
+            )
+        } 
+
+        return <h3>{props.details.value}</h3>
+
     }
 
 
@@ -54,7 +84,6 @@ const BlackjackPlayer = props => {
             console.log('player ' + props.details.seat + ' busts');
             return (
                 <div className="player-actions">
-                    <h3>Bust!</h3>
                 </div>
             )
         }
@@ -85,10 +114,14 @@ const BlackjackPlayer = props => {
 
             </div>
             <h2>{props.details.name}</h2>
+            
             <div className="cards-container">
                 {renderCards()}
             </div>
-                {renderButtons()}
+
+            {renderScore()}
+
+            {renderButtons()}
                 
         </div>
      );

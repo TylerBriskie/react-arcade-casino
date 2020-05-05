@@ -27,14 +27,14 @@ class BlackJack extends Component {
                 seat: 2,
                 name: 'Player Two',
                 credits: 5000,
-                cards: ['AD', 'KS','9H', '9H', '0S', '0C','9H', '9H', '0S', '0C'],
+                cards: ['AD', 'KS','9H', '3H', 'JS', 'JC','9C', '9S', 'AC', '2C','0H', '0C'],
                 value: 11,
                 hasBlackjack: false,
             }, {
                 seat: 3,
                 name: 'Mickey Mouse',
                 credits: 100,
-                cards: ['3S', 'KD', '2H', '9H', '9H', '0S', ],
+                cards: ['3S', 'KD', '2H', '9H', '9H', '9H', '7H' ],
                 value: 24,
                 hasBlackjack: false,
             }],
@@ -50,7 +50,6 @@ class BlackJack extends Component {
         }
     }
 
-
     changeGamePhase = async (e) => {
         console.log('changing game phase, ', e.target.value);
 
@@ -61,6 +60,16 @@ class BlackJack extends Component {
         console.log(this.state);
 
     }
+    
+    buildPlayers(){
+       return this.state.players.map(p => 
+            <BlackjackPlayer 
+                details={{...p}} 
+                isPlayerTurn={this.state.playerTurn === p.seat}
+                changeGamePhase={() => this.changeGamePhase}
+            />
+        )
+    }
 
     render(){
         return (
@@ -69,13 +78,7 @@ class BlackJack extends Component {
                     BLACKJACK GAME
                 </h2>
                 <div className="players-container">
-                {this.state.players.map(p => 
-                    <BlackjackPlayer 
-                        details={{...p}} 
-                        isPlayerTurn={this.state.playerTurn === p.seat}
-                        changeGamePhase={() => this.changeGamePhase}
-                    />
-                )}
+                    {this.buildPlayers()}
 
                 </div>
 
