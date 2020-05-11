@@ -1,4 +1,13 @@
 .players-container{
     display: flex;
     flex-direction: row;
+    width: inherit;
+    justify-content: space-evenly;
+    margin-bottom: 10vh;
+}
+
+.dealer-row {
+    display: flex;
+    flex-direction: row;
+    width: inherit;
 }

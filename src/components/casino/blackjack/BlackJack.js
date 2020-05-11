@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
+import Button from '@material-ui/core/Button';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import axios from 'axios';
 
 
 // LOCAL IMPORTS
 import BlackjackPlayer from './BlackjackPlayer/BlackjackPlayer';
 import './BlackJack.css';
+import BlackjackDealer from './BlackjackDealer/BlackjackDealer';
 
 
 const PLACE_YOUR_BETS = "PLACE_YOUR_BETS";
 const PLAYER_TURNS = "PLAYER_TURNS";
-const DEALER_TURNS = "DEALER_TURNS";
+const DEALER_TURN = "DEALER_TURN";
 const PAYOUT = "PAYOUT";
 
 
@@ -19,23 +24,11 @@ class BlackJack extends Component {
             players: [{
                 seat: 1,
                 name: 'Player One',
+                ready: false,
                 credits: 5000,
-                cards: ['3S', 'QS'],
-                value: 13,
-                hasBlackjack: false,
-            }, {
-                seat: 2,
-                name: 'Player Two',
-                credits: 5000,
-                cards: ['AD', 'KS','9H', '3H', 'JS', 'JC','9C', '9S', 'AC', '2C','0H', '0C'],
-                value: 11,
-                hasBlackjack: false,
-            }, {
-                seat: 3,
-                name: 'Mickey Mouse',
-                credits: 100,
-                cards: ['3S', 'KD', '2H', '9H', '9H', '9H', '7H' ],
-                value: 24,
+                wager: 25,
+                cards: [],
+                value: 0,
                 hasBlackjack: false,
             }],
             dealer: {
@@ -44,11 +37,12 @@ class BlackJack extends Component {
                 value: 0,
                 isBlackjack: false,
             },
-            playerTurn: 1,
+            playerTurn: 0,
             gamePhase: PLACE_YOUR_BETS,
 
         }
     }
+
 
     changeGamePhase = async (e) => {
         console.log('changing game phase, ', e.target.value);
@@ -60,25 +54,103 @@ class BlackJack extends Component {
         console.log(this.state);
 
     }
-    
+
+
+    playerReady = (player) => {
+
+        let stateCopy = Object.assign({}, this.state);
+        let players = stateCopy.players
+        let playerToWager = players.find(p => p.seat === player.seat)
+        playerToWager.wager = player.wager
+        this.setState({
+            players,
+        })
+
+        // WHILE GAME IS STILL SINGLE PLAYER ONLY, GO AHEAD AND DEAL CARDS WHEN PLAYER IS READY
+        this.dealCards()
+
+    }
+
+
     buildPlayers(){
        return this.state.players.map(p => 
             <BlackjackPlayer 
+                key={p.seat}
                 details={{...p}} 
                 isPlayerTurn={this.state.playerTurn === p.seat}
+                gamePhase={this.state.gamePhase}
+                playerReady={this.playerReady}
                 changeGamePhase={() => this.changeGamePhase}
             />
         )
     }
 
+
+    // SEND BETS TO SERVER AND GET INITIAL CARDS
+    dealCards() {   
+
+
+        
+        // alert('dealing...')   
+        const postData = {
+            players: this.state.players,
+        };
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/newHand', postData)
+        .then((response) => {
+            console.log(response.data);
+            
+            this.setState({
+                gamePhase: PLAYER_TURNS,
+                players: response.data.players,
+                dealer: {
+                    ...this.state.dealer,
+                    cards: response.data.dealer.cards,
+                    value: response.data.value
+                }
+            })
+            
+        })
+        .catch(function (error) {
+            console.error(error);
+            // TODO: SHOW SNACKBAR
+        });
+
+    }
+
+   
     render(){
+
+        const GreenButton = withStyles((theme) => ({
+            root: {
+              color: theme.palette.getContrastText(green[900]),
+              backgroundColor: green[500],
+              '&:hover': {
+                backgroundColor: green[200],
+                color: theme.palette.getContrastText(green[200]),
+
+              },
+            },
+          }))(Button);
+
         return (
             <div className="page-container">
-                <h2 className="page-section-header">
-                    BLACKJACK GAME
-                </h2>
-                <div className="players-container">
-                    {this.buildPlayers()}
+                <div className="dealer-row">
+                    <div className="dealer-container" style={{width: '50%'}}>
+                        <BlackjackDealer 
+                            details={this.state.dealer}                 
+                            gamePhase={this.state.gamePhase}
+                            dealerTurn={this.state.playerTurn === 5} 
+                        />
+                    </div>
+                    <div className="game-status" style={{width: '50%'}}>
+                         <h2>Player Turn</h2>
+                    </div>
+                </div>
+                <div>
+                    <div className="players-container">
+                        {this.buildPlayers()}
+
+                    </div>
 
                 </div>
 

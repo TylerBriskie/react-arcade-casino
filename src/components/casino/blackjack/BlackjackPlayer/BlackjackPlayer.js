@@ -1,11 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import MinusIcon from '@material-ui/icons/Remove';
+import Button from '@material-ui/core/Button';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // LOCAL
 import './BlackjackPlayer.css';
 import CardBack from '../../../../playing-card-back-1.png';
 
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+
 const BlackjackPlayer = props => {
+
+    // STYLE OVERRIDES
+    const useStyles = makeStyles((theme) => ({
+        close: {
+            padding: theme.spacing(0.5),
+        },
+    }));
+
+
+    // LOCAL STATE
+    const [wager, setWager] = useState(25);
+    const [open, setOpen] = useState(false);
+  
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+    };
+
+
+
+
 
 
     const doubleDownDisabled = () => {
@@ -20,6 +59,21 @@ const BlackjackPlayer = props => {
         }
     }
 
+    const modifyWager = raise => {
+        if (raise === true){
+            setWager(wager + 25)
+        } else {
+            if (wager > 25){
+                setWager(wager - 25);
+
+            } else {
+                setOpen(true);
+            }
+        }
+    }
+    
+
+    // LOGIC FOR DISPLAYING PLAYERS CARDS
     const renderCards = () => {
 
 
@@ -92,39 +146,62 @@ const BlackjackPlayer = props => {
 
         return (
             <div className="player-actions">            
-                <Fab color="primary" aria-label="hit" onClick={props.changeGamePhase("PAYOUT")}>
+                <Fab color="primary" aria-label="hit">
                     Hit
                 </Fab>
-                <Fab color="primary" aria-label="stay">
+                <Fab color="primary" aria-label="stay" onClick={props.changeGamePhase("DEALER_TURN")}>
                     Stay
                 </Fab>
-                <Fab color="primary" disabled={ doubleDownDisabled()} aria-label="stay" style={{fontSize:10}}>
-                    Double Down
-                </Fab>
-                <Fab color="primary" disabled={() => doubleDownDisabled} aria-label="stay">
-                    Split
-                </Fab>
+
             </div>
         )
     }
 
-    return ( 
-        <div className="individual-player-wrapper game-card">
-            <div className="player-details">
 
+    const classes = useStyles();
+
+    // COMPONENT RETURN METHOD LOGIC
+    if (props.gamePhase == "PLACE_YOUR_BETS"){
+        return ( 
+            <div className="individual-player-wrapper game-card">
+              
+                <h2>{props.details.name}</h2>
+                <div className="place-your-bet-buttons">
+                    <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(false)}><MinusIcon /></Fab>
+                    <h2>{wager}</h2>
+                    <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(true)}><AddIcon /></Fab>
+
+                </div>
+                    <Button variant="contained" color="primary" style={{width: "100%"}}  onClick={() => props.playerReady({seat: props.details.seat, wager})}>PLACE YOUR BET</Button>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info">
+                        Minimum Bet is 25 credits
+                        </Alert>
+                    </Snackbar>
             </div>
-            <h2>{props.details.name}</h2>
-            
-            <div className="cards-container">
-                {renderCards()}
+         );
+    } else {
+        return ( 
+            <div className="individual-player-wrapper game-card">
+                <div className="player-details">
+                    
+                </div>
+                <h2>{props.details.name} hey</h2>
+                    <h3>{props.details.credits} credits</h3>
+                <div className="cards-container">
+                    {renderCards()}
+                </div>
+    
+                {renderScore()}
+    
+                {renderButtons()}
+                    
             </div>
-
-            {renderScore()}
-
-            {renderButtons()}
-                
-        </div>
-     );
+         );
+    }
+    
 }
  
+
+
 export default BlackjackPlayer;
