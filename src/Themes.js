@@ -1,18 +1,19 @@
 
 import deepPurple from '@material-ui/core/colors/deepPurple';
-import yellow from '@material-ui/core/colors/yellow';
-import blue from '@material-ui/core/colors/blue';
+import pink from '@material-ui/core/colors/pink';
+import cyan from '@material-ui/core/colors/cyan';
 
 
 const Theme = {
     palette: {
         type: 'dark',
         primary: deepPurple,
-        secondary: yellow,
+        secondary: pink,
         background: {
             paper: "#000000",
-            default: '#222222',
+            default: '#000000',
         },
+        warning: cyan,
         
     }
   }
