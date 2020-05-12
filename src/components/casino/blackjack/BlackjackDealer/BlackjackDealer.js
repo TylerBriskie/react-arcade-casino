@@ -12,7 +12,7 @@ const BlackjackDealer = props => {
         let cardImgs = props.details.cards.map(c => {
             
                 if (props.details.cards.indexOf(c) === 0){
-                    if (!props.dealerTurn){
+                    if (props.gamePhase !== "DEALER_TURN"){
                         return <img key={c} src={CardBack}></img>
                     } else {
                         return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>

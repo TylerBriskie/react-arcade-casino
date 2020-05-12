@@ -13,6 +13,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 // LOCAL
 import './BlackjackPlayer.css';
 import CardBack from '../../../../playing-card-back-1.png';
+import axios from 'axios';
 
 
 function Alert(props) {
@@ -31,17 +32,18 @@ const BlackjackPlayer = props => {
 
 
     // LOCAL STATE
-    const [wager, setWager] = useState(25);
+    const [wager, setWager] = useState(0);
+    const [credits, setCredits] = useState(props.details.credits);
     const [open, setOpen] = useState(false);
-  
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
         }
         setOpen(false);
+        setErrorMessage('');
     };
-
 
 
 
@@ -61,14 +63,20 @@ const BlackjackPlayer = props => {
 
     const modifyWager = raise => {
         if (raise === true){
-            setWager(wager + 25)
-        } else {
-            if (wager > 25){
-                setWager(wager - 25);
-
+            if (credits >= 25){
+                setWager(wager + 25)
+                setCredits(credits - 25)
             } else {
                 setOpen(true);
+                setErrorMessage("You do not have enough credits");
+
             }
+        } else {
+            if (wager > 24){
+                setWager(wager - 25);
+                setCredits(credits + 25)
+
+            } 
         }
     }
     
@@ -146,13 +154,18 @@ const BlackjackPlayer = props => {
 
         return (
             <div className="player-actions">            
-                <Fab color="primary" aria-label="hit">
+                <Fab color="primary" aria-label="hit" onClick={() => props.requestCard()}>
                     Hit
                 </Fab>
                 <Fab color="primary" aria-label="stay" onClick={props.changeGamePhase("DEALER_TURN")}>
                     Stay
                 </Fab>
-
+                <Fab color="primary" aria-label="stay" disabled={!props.details.canDoubleDown}>
+                    Double Down
+                </Fab>
+                <Fab color="primary" aria-label="stay" disabled={!props.details.canSplit}>
+                    Split
+                </Fab>
             </div>
         )
     }
@@ -164,20 +177,29 @@ const BlackjackPlayer = props => {
     if (props.gamePhase == "PLACE_YOUR_BETS"){
         return ( 
             <div className="individual-player-wrapper game-card">
-              
-                <h2>{props.details.name}</h2>
-                <div className="place-your-bet-buttons">
-                    <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(false)}><MinusIcon /></Fab>
-                    <h2>{wager}</h2>
-                    <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(true)}><AddIcon /></Fab>
-
+                <div className="player-details">
+                    <h2>{props.details.name}</h2>
+                    <h4>Credits: {credits}</h4>
                 </div>
-                    <Button variant="contained" color="primary" style={{width: "100%"}}  onClick={() => props.playerReady({seat: props.details.seat, wager})}>PLACE YOUR BET</Button>
+
+                <div>
+                    <h4>Current Bet</h4>
+                    <div className="place-your-bet-buttons">
+                        <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(false)}><MinusIcon /></Fab>
+                        <h2>{wager}</h2>
+                        <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(true)}><AddIcon /></Fab>
+                    </div>
+                </div>
+
+                <div>
+                    <Button variant="contained" color="primary" style={{width: "100%"}} disabled={wager === 0} onClick={() => props.playerReady(wager)}>PLACE YOUR BET</Button>
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                         <Alert onClose={handleClose} severity="info">
-                        Minimum Bet is 25 credits
+                            {errorMessage}
                         </Alert>
                     </Snackbar>
+                </div>
+                
             </div>
          );
     } else {
@@ -186,8 +208,8 @@ const BlackjackPlayer = props => {
                 <div className="player-details">
                     
                 </div>
-                <h2>{props.details.name} hey</h2>
-                    <h3>{props.details.credits} credits</h3>
+                <h2>{props.details.name}</h2>
+                    <h3>{credits} credits</h3>
                 <div className="cards-container">
                     {renderCards()}
                 </div>

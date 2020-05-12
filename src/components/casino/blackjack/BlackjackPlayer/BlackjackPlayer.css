@@ -10,8 +10,8 @@
     flex-direction: column;
 }
 
-.player-details {
-    align-self: flex-start;
+.player-details h4 {
+    margin-top: 1em;
 }
 
 .cards-container {

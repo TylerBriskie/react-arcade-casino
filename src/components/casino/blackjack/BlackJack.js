@@ -12,7 +12,7 @@ import BlackjackDealer from './BlackjackDealer/BlackjackDealer';
 
 
 const PLACE_YOUR_BETS = "PLACE_YOUR_BETS";
-const PLAYER_TURNS = "PLAYER_TURNS";
+const PLAYER_TURN = "PLAYER_TURN";
 const DEALER_TURN = "DEALER_TURN";
 const PAYOUT = "PAYOUT";
 
@@ -21,16 +21,18 @@ class BlackJack extends Component {
     constructor(props){
         super(props);
         this.state = {
-            players: [{
+            player: {
                 seat: 1,
                 name: 'Player One',
                 ready: false,
                 credits: 5000,
-                wager: 25,
+                wager: 0,
                 cards: [],
                 value: 0,
                 hasBlackjack: false,
-            }],
+                canDoubleDown: false,
+                canSplit: false,
+            },
             dealer: {
                 seat: 5,
                 cards: [],
@@ -56,14 +58,15 @@ class BlackJack extends Component {
     }
 
 
-    playerReady = (player) => {
+    playerReady = (wager) => {
 
         let stateCopy = Object.assign({}, this.state);
-        let players = stateCopy.players
-        let playerToWager = players.find(p => p.seat === player.seat)
-        playerToWager.wager = player.wager
+        let player = stateCopy.player;
+        player.ready = true;
+        player.wager = wager;
+        player.credits = player.credits - wager;
         this.setState({
-            players,
+            player,
         })
 
         // WHILE GAME IS STILL SINGLE PLAYER ONLY, GO AHEAD AND DEAL CARDS WHEN PLAYER IS READY
@@ -72,42 +75,51 @@ class BlackJack extends Component {
     }
 
 
-    buildPlayers(){
-       return this.state.players.map(p => 
-            <BlackjackPlayer 
-                key={p.seat}
-                details={{...p}} 
-                isPlayerTurn={this.state.playerTurn === p.seat}
-                gamePhase={this.state.gamePhase}
-                playerReady={this.playerReady}
-                changeGamePhase={() => this.changeGamePhase}
-            />
-        )
-    }
+    // buildPlayers(){
+    //    return this.state.players.map(p => 
+    //         <BlackjackPlayer 
+    //             key={p.seat}
+    //             details={{...p}} 
+    //             isPlayerTurn={this.state.playerTurn === p.seat}
+    //             gamePhase={this.state.gamePhase}
+    //             playerReady={this.playerReady}
+    //             requestCard={this.requestCard}
+    //             changeGamePhase={() => this.changeGamePhase}
+    //         />
+    //     )
+    // }
+
+
+
 
 
     // SEND BETS TO SERVER AND GET INITIAL CARDS
     dealCards() {   
 
 
-        
+            
         // alert('dealing...')   
         const postData = {
-            players: this.state.players,
+            player: this.state.player,
         };
+
+        console.log(postData);
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/newHand', postData)
         .then((response) => {
             console.log(response.data);
             
             this.setState({
-                gamePhase: PLAYER_TURNS,
-                players: response.data.players,
+                gamePhase: PLAYER_TURN,
+                player: response.data.player,
                 dealer: {
                     ...this.state.dealer,
                     cards: response.data.dealer.cards,
                     value: response.data.value
                 }
-            })
+            });
+            if (this.state.player.hasBlackjack){
+                alert('Blackjack!');
+            }
             
         })
         .catch(function (error) {
@@ -117,7 +129,33 @@ class BlackJack extends Component {
 
     }
 
-   
+
+    // REQUEST A CARD
+    requestCard = () => {
+        const postBody = {
+            empty: 'json',
+        }
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/hitme', postBody).then((response) => {
+            console.log(response.data);
+            this.setState({
+                player: response.data.player
+
+            });
+
+            if (this.state.player.hasBlackJack || this.state.player.value > 21){
+                this.setState({
+                    gamePhase: DEALER_TURN
+                })
+            }
+
+
+        })
+
+    }
+
+
+
+    // RENDER FUNCTION
     render(){
 
         const GreenButton = withStyles((theme) => ({
@@ -148,7 +186,14 @@ class BlackJack extends Component {
                 </div>
                 <div>
                     <div className="players-container">
-                        {this.buildPlayers()}
+                    <BlackjackPlayer 
+                        details={{...this.state.player}} 
+                        isPlayerTurn={this.state.gamePhase === PLAYER_TURN }
+                        gamePhase={this.state.gamePhase}
+                        playerReady={this.playerReady}
+                        requestCard={this.requestCard}
+                        changeGamePhase={() => this.changeGamePhase}
+                    />
 
                     </div>
 
