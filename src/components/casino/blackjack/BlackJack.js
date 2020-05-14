@@ -171,7 +171,7 @@ class BlackJack extends Component {
           }))(Button);
 
         return (
-            <div className="page-container">
+            <div className="page-container" id="blackjack-game-container">
                 <div className="dealer-row">
                     <div className="dealer-container" style={{width: '50%'}}>
                         <BlackjackDealer 
