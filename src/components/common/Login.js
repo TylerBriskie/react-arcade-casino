@@ -1,3 +1,4 @@
+
 import React, {useContext} from 'react';
 import {TextField, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom'
@@ -11,6 +12,9 @@ import axios from 'axios';
 import { AuthContext } from '../../contexts/authContext';
 
 import './Login.css';
+
+
+var jwt_decode = require('jwt-decode');
 
 const Login = () => {
     let history = useHistory();
@@ -55,12 +59,18 @@ const Login = () => {
                         // LOGIN SUCCESS
                         setSubmitting(false);
 
+                        var decoded = jwt_decode(response.data);
+                        console.log(decoded);
+
                         setAuthenticated({
                             isAuthenticated: true,
-                            token: response.data
+                            token: response.data,
+                            id: decoded.user_id,
+                            username: decoded.username,
+                            credits: decoded.credits
                         });
 
-                        history.push('/');
+                        history.push('/account');
                        
                         
                     })
@@ -76,7 +86,7 @@ const Login = () => {
                         //     })
                            formErrorMessage = "There was an error logging in.  Check your credentials and try again."
                         // }
-                        console.log(formErrorMessage);
+                        console.log(formErrorMessage, error);
                         
                         setSubmitting(false);
                     });

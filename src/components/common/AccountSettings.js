@@ -9,7 +9,6 @@ class AccountSettings extends Component {
     }
 
     render() { 
-       
         return (
             <AuthContext.Consumer>
                 {(authContext) => (
@@ -20,6 +19,8 @@ class AccountSettings extends Component {
                         </h1>
         
                         <hr />
+
+                <h3>Username:<span>{authContext.username}</span></h3>
                         {/* <h4> theme </h4>
                         <button onClick={() => setTheme('default')}>
                             Default
