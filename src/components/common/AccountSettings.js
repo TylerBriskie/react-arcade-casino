@@ -1,26 +1,20 @@
 import React, { Component } from 'react';
-import { AuthContext } from '../../contexts/authContext';
 
-class AccountSettings extends Component {
+const AccountSettings = () => {
 
-    constructor(props) {
-        super(props);
-        this.state = {  }        
-    }
-
-    render() { 
+  
         return (
-            <AuthContext.Consumer>
-                {(authContext) => (
-                                               
-                    <div>
-                        <h1>
-                            Account Settings
-                        </h1>
-        
-                        <hr />
+            <div>
+               
+                                            
+                <div>
+                    <h1>
+                        Account Settings
+                    </h1>
+    
+                    <hr />
 
-                <h3>Username:<span>{authContext.username}</span></h3>
+                    <h3>Username:<span>{}</span></h3>
                         {/* <h4> theme </h4>
                         <button onClick={() => setTheme('default')}>
                             Default
@@ -46,14 +40,13 @@ class AccountSettings extends Component {
                             </Box>
                         </div>
                          */}
-                    </div>
-                
-                )}
+                </div>
 
 
-            </AuthContext.Consumer>
+
+            </div>
          );
     }
-}
+
  
 export default AccountSettings;

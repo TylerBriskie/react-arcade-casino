@@ -7,9 +7,7 @@ import Button from '@material-ui/core/Button';
 // LOCAL IMPORTS
 import './NavBar.css';
 import HeaderLogo from '../../CasinoHeaderLogo.png';
-import { AuthContext } from '../../contexts/authContext';
-
-
+import { useStore } from "../../contexts/store";
 
 const NavBar = (props) => {
     const useStyles = makeStyles({
@@ -23,11 +21,12 @@ const NavBar = (props) => {
     
     
 
-    const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
+    const {state, dispatch} = useStore();
 
 
     const logoutUser = () => {
-        setAuthenticated({
+        this.dispatch({
+            type: "USER_LOGOUT",
             isAuthenticated: false,
             token: '',
         })
@@ -51,7 +50,7 @@ const NavBar = (props) => {
                         <Link to="/casino" >Casino</Link>
                     </Button>
                 {
-                    isAuthenticated ?
+                    state.isAuthenticated ?
                     (<React.Fragment>
                         <Button>
                             <Link to="/account" >Account</Link>

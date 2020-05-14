@@ -11,12 +11,10 @@ import axios from 'axios';
 import GameCard from '../common/GameCard';
 
 // CONTEXT
-import { AuthContext } from '../../contexts/authContext';
 
 
 const CasinoHome = () => {
 
-    const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
 
 
     return ( 

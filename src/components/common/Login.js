@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 // LOCAL IMPORTS
-import { AuthContext } from '../../contexts/authContext';
+import { useStore } from "../../contexts/store";
 
 import './Login.css';
 
@@ -18,7 +18,7 @@ var jwt_decode = require('jwt-decode');
 
 const Login = () => {
     let history = useHistory();
-    const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
+    const {state, dispatch} = useStore();
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string()
@@ -62,7 +62,8 @@ const Login = () => {
                         var decoded = jwt_decode(response.data);
                         console.log(decoded);
 
-                        setAuthenticated({
+                        dispatch({
+                            type: "USER_LOGIN",
                             isAuthenticated: true,
                             token: response.data,
                             id: decoded.user_id,

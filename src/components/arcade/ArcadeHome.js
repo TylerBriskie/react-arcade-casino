@@ -7,13 +7,11 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 // LOCAL IMPORTS
-import { AuthContext } from '../../contexts/authContext';
 
 // import './Login.css';
 
 const ArcadeHome = () => {
 
-    const { isAuthenticated, setAuthenticated } = useContext(AuthContext);
 
 
     return ( 
