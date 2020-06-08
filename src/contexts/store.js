@@ -1,26 +1,51 @@
 // store.js
 import React, { createContext, useContext, useReducer } from 'react';
+import axios from 'axios';
+
+
+const jwt_decode = require('jwt-decode');
 
 const StoreContext = createContext();
-const initialState = {
-    count: 0, 
-    message: "",
-    isAuthenticated: false,
-    token: '',
-    id: '',
-    username: '',
-    credits: 0,
+const token = localStorage.getItem('token');
 
-};
+console.log(token);
+
+let initialState;
+
+
+if (token === null){
+    initialState = {
+        isAuthenticated: false,
+        token: '',
+        id: '',
+        username: '',
+        credits: 0,
+        
+    }
+} else {
+    const decoded = jwt_decode(token);
+    initialState = {
+        isAuthenticated: true,
+        token,
+        id: decoded.user_id,
+        username: decoded.username,
+        credits: decoded.credits
+    }
+    
+    
+}
+
 
 const reducer = (state, action) => {
 
 
     console.log(state)
+    
   switch(action.type) {
-
+    
     case "USER_LOGIN": 
-        console.log('login action');
+        console.log('log in user ' + action.username)
+        localStorage.setItem('token', action.token);
         return {
             isAuthenticated: true,
             username: action.username,
@@ -28,6 +53,8 @@ const reducer = (state, action) => {
             token: action.token,
         }
     case "USER_LOGOUT":
+        console.log('logging out')
+        localStorage.removeItem('token');
         return {
             isAuthenticated: false,
 

@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import "./Signup.css";
 import { useStore } from "../../contexts/store";
 
-
+const jwt_decode = require('jwt-decode');
 const axios = require('axios');
 
 

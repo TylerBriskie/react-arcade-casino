@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { useStore } from "../../contexts/store";
 
 const AccountSettings = () => {
+    const {state, dispatch} = useStore();
 
   
         return (
@@ -14,7 +16,7 @@ const AccountSettings = () => {
     
                     <hr />
 
-                    <h3>Username:<span>{}</span></h3>
+                    <h3>Username: <span>{state.username}</span></h3>
                         {/* <h4> theme </h4>
                         <button onClick={() => setTheme('default')}>
                             Default

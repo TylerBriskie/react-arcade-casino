@@ -25,7 +25,7 @@ const NavBar = (props) => {
 
 
     const logoutUser = () => {
-        this.dispatch({
+        dispatch({
             type: "USER_LOGOUT",
             isAuthenticated: false,
             token: '',

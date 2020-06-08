@@ -14,7 +14,7 @@ import { useStore } from "../../contexts/store";
 import './Login.css';
 
 
-var jwt_decode = require('jwt-decode');
+const jwt_decode = require('jwt-decode');
 
 const Login = () => {
     let history = useHistory();
@@ -59,7 +59,7 @@ const Login = () => {
                         // LOGIN SUCCESS
                         setSubmitting(false);
 
-                        var decoded = jwt_decode(response.data);
+                        const decoded = jwt_decode(response.data);
                         console.log(decoded);
 
                         dispatch({
