@@ -80,7 +80,6 @@ const BlackjackPlayer = props => {
         let cardCount = 0;
 
         let cardImgs = props.details.cards.map(c => {
-            console.log(props.details.cards.length);
             if (cardCount === 0 ){
                 cardCount++;
                 return <img src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>

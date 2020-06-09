@@ -88,12 +88,8 @@ const BlackJack = (props) => {
     useEffect(() => {
 
         if (gamePhase === DEALER_TURN){
-            axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/dealer-turn', {})
-                .then(res => {
-                    console.log('response from dealer-turn', res);
+            dealDealerCards();
 
-                }       
-            )
         }
     }, [gamePhase]);
 
@@ -157,6 +153,118 @@ const BlackJack = (props) => {
         }
     }
 
+    const dealDealerCards = () => {
+
+        setMessages(oldMessages => {
+            return [
+                ...oldMessages,
+                "Player Turn Over"
+            ]
+        });
+
+
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/dealer-turn', {})
+        .then(res => {
+            console.log('response from dealer-turn', res);
+            // INITIAL DEALER CARD FLIP...
+            // REPLACE PLACEHOLDER CARD WITH REAL FIRST CARD
+
+            updateDealer( oldDealer => ({
+                ...oldDealer,
+                cards: [res.data.dealer.cards[0], res.data.dealer.cards[1]]
+            }))
+
+
+
+            setMessages(oldMessages => {
+                    let newMessages = [...oldMessages];
+                    newMessages.push("Dealer Reveals " + res.data.dealer.revealedCard);
+                    newMessages.push("Dealer Has " + res.data.dealer.initialScore);
+                    return newMessages
+            });
+
+            // DEAL CARDS UNTIL THERE IS A WINNER...
+            // ...EXCEPT WE ALREADY KNOW THE RESULT.  WE JUST WANT TO SLOW DOWN THE DEALER
+            // SO SHE MOVES AT HUMAN SPEED INSTEAD OF COMPUTER SPEED
+
+            if (res.data.dealer.cards.length < 3){
+                setMessages(oldMessages => {
+                    let newMessages = [...oldMessages];
+
+                    if (res.data.winner === "DEALER"){
+                        newMessages.push('Dealer Wins')
+                        console.log('dealer wins');
+                    } else if (res.data.winner === "PLAYER"){
+                        newMessages.push("Player Wins");
+                        console.log('player wins');
+    
+                    }    
+                    return newMessages
+                });
+
+
+            
+            } else {
+
+                for (let i = 2; i < res.data.dealer.cards.length; i++){
+
+
+                    setTimeout(() => {
+    
+                        // SHOW NEW CARD                    
+
+                        updateDealer(oldDealer => {
+                                
+                                return {
+                                    ...oldDealer,
+                                    cards: [...oldDealer.cards, res.data.dealer.cards[i]]
+                                }
+
+                            }
+                        )
+    
+                        // LAST CARD, SHOW WINNER
+                        if (i === res.data.dealer.cards.length - 1){
+                            setMessages(oldMessages => {
+                                let newMessages = [...oldMessages];
+                                newMessages.pop();
+                                newMessages.push('Dealer has ' + res.data.dealer.value);
+                                if (res.data.winner === "DEALER"){
+                                    newMessages.push('Dealer Wins')
+                                    console.log('dealer wins');
+                                } else if (res.data.winner === "PLAYER"){
+                                    newMessages.push("Player Wins");
+                                    console.log('player wins');
+        
+                                }
+                                
+                                return newMessages
+                            })
+           
+                        }
+    
+                    }, 500);
+    
+    
+                }
+            }
+
+
+            // IF DEALER WINS...
+            // newMessages = [...gameMessages];
+
+            // if (res.data.winner === "DEALER"){
+            //     newMessages.push('Dealer Wins')
+
+            // } else if (res.data.winner === "PLAYER"){
+            //     newMessages.push("Player Wins");
+            // }                
+            // setMessages(newMessages);
+
+        }       
+    )
+    }
+
     const playerReady = (ready) => {
 
         // WHILE GAME IS STILL SINGLE PLAYER ONLY, GO AHEAD AND DEAL CARDS WHEN PLAYER IS READY.
@@ -180,33 +288,33 @@ const BlackJack = (props) => {
         };
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/newHand', postData)
-        .then((response) => {
-            console.log(response);
-            setGamePhase(PLAYER_TURN);
-            updatePlayer({
-                ...player,
-                cards: response.data.player.cards,
-                value: response.data.player.value,
-                hasBlackJack: response.data.player.hasBlackJack,
-                canSplit: response.data.player.canSplit,
-                canDoubleDown: response.data.player.canDoubleDown
-            });
-            updateDealer({
-                ...dealer,
-                cards: response.data.dealer.cards,
-            })
-            let copyMessages = [...gameMessages];
-            copyMessages.push('Player has ' +  response.data.player.value);
-            copyMessages.push('Dealer is showing ' +  response.data.dealer.shown);
-            setMessages(copyMessages);
+            .then((response) => {
+                console.log(response);
+                setGamePhase(PLAYER_TURN);
+                updatePlayer({
+                    ...player,
+                    cards: response.data.player.cards,
+                    value: response.data.player.value,
+                    hasBlackJack: response.data.player.hasBlackJack,
+                    canSplit: response.data.player.canSplit,
+                    canDoubleDown: response.data.player.canDoubleDown
+                });
+                updateDealer({
+                    ...dealer,
+                    cards: ['HIDDEN_CARD', response.data.dealer.cards],
+                })
+                let copyMessages = [...gameMessages];
+                copyMessages.push('Player has ' +  response.data.player.value);
+                copyMessages.push('Dealer is showing ' +  response.data.dealer.shown);
+                setMessages(copyMessages);
 
-            
-        })
-        // .catch(function (error) {
-        //     console.error(error);
-        //     // TODO: SHOW SNACKBAR
-        // });
-        // console.log(state);
+                
+            })
+            // .catch(function (error) {
+            //     console.error(error);
+            //     // TODO: SHOW SNACKBAR
+            // });
+            // console.log(state);
     }
 
 
