@@ -8,9 +8,10 @@ const BlackjackDealer = props => {
 
 
     const renderDealerCards = () => {
-
-        let cardImgs = props.details.cards.map(c => {
+   
+        let cardImgs =  props.details.cards.map(c => {
             
+
                 if (props.details.cards.indexOf(c) === 0){
                     if (props.gamePhase !== "DEALER_TURN"){
                         return <img key={c} src={CardBack}></img>
@@ -23,7 +24,7 @@ const BlackjackDealer = props => {
                 }
 
         })
-        return cardImgs
+        return cardImgs;
     }
 
 
