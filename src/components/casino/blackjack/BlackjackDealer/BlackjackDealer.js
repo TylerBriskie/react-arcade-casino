@@ -13,7 +13,7 @@ const BlackjackDealer = props => {
             
 
                 if (props.details.cards.indexOf(c) === 0){
-                    if (props.gamePhase !== "DEALER_TURN"){
+                    if (props.gamePhase === "PLAYER_TURN"){
                         return <img key={c} src={CardBack}></img>
                     } else {
                         return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
@@ -50,9 +50,7 @@ const BlackjackDealer = props => {
                 <div className="cards-container">
                     {renderDealerCards()}
                 </div>
-    
-                {renderDealerScore()}
-    
+        
             </div>
          );
     } 

@@ -214,22 +214,25 @@ const BlackjackPlayer = props => {
          );
     } else {
         return ( 
-            <div className="player-row">
-                <div className="individual-player-wrapper game-card">
+            <div className="row">
+                <div>
+                    <div className="individual-player-wrapper game-card">
+                                
                             
-                        
-                    <div className="player-details">
-                        
-                    </div>
-                    <h2>{props.details.name}</h2>
-                    <h3>{props.details.credits} credits</h3>
-                    <div className="cards-container">
-                        {renderCards()}
-                    </div>
+                        <div className="player-details">
+                            
+                        </div>
+                        <h2>{props.details.name}</h2>
+                        <h3>{props.details.credits} credits</h3>
+                        <div className="cards-container">
+                            {renderCards()}
+                        </div>
 
 
-                        
+                            
+                    </div>
                 </div>
+
 
                 {renderButtons()}
 

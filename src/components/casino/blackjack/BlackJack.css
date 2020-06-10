@@ -18,3 +18,24 @@
     flex-direction: row;
     width: inherit;
 }
+
+.game-status {
+    height: 300px;
+    outline: rgb(103,58,183) solid 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(103,58,183, 0.3)
+}
+.game-status h2 {
+
+    margin-bottom: 1em;
+}
+
+.game-status ul {
+    padding: 0;
+}
+
+.game-status ul li{
+    list-style: none;
+}

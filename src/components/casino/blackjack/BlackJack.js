@@ -93,6 +93,25 @@ const BlackJack = (props) => {
             dealDealerCards();
 
         }
+
+        if (gamePhase === PLACE_YOUR_BETS){
+            setMessages([])
+            updatePlayer(oldPlayer => {
+                let newPlayer = {...oldPlayer}
+                newPlayer.cards = [];
+                newPlayer.value = 0;
+                return newPlayer
+            })
+
+            updateDealer(oldDealer => {
+                let newDealer = {...oldDealer}
+                newDealer.value = 0;
+                newDealer.cards = [];
+                return newDealer;
+            })
+
+        }
+
     }, [gamePhase]);
 
 
@@ -173,6 +192,7 @@ const BlackJack = (props) => {
 
             updateDealer( oldDealer => ({
                 ...oldDealer,
+                value: res.data.dealer.initialScore,
                 cards: [res.data.dealer.cards[0], res.data.dealer.cards[1]]
             }))
 
@@ -255,6 +275,7 @@ const BlackJack = (props) => {
     
                 }
             }
+
         }       
     )
     }
@@ -264,10 +285,14 @@ const BlackJack = (props) => {
         // WHILE GAME IS STILL SINGLE PLAYER ONLY, GO AHEAD AND DEAL CARDS WHEN PLAYER IS READY.
         // TODO: WHEN MULTIPLAYER IS IMPLEMENTED, WAIT FOR ALL PLAYERS TO BE READY TO DEAL CARDS
         // useEffect(()=> if (all players ready) dealCards(), [players])
-        let copyMessages = [...gameMessages];
-        copyMessages.push("Player Bets " + player.wager);
-        copyMessages.push("Dealing cards...");
-        setMessages(copyMessages);
+
+        setMessages(oldMessages => {
+            let newMessages = [...oldMessages];
+            newMessages.push("Player Bets " + player.wager);
+            newMessages.push("Dealing cards...");
+
+            return newMessages
+        });
 
         dealCards();
         
@@ -297,10 +322,13 @@ const BlackJack = (props) => {
                     ...dealer,
                     cards: ['HIDDEN_CARD', response.data.dealer.cards],
                 })
-                let copyMessages = [...gameMessages];
-                copyMessages.push('Player has ' +  response.data.player.value);
-                copyMessages.push('Dealer is showing ' +  response.data.dealer.shown);
-                setMessages(copyMessages);
+
+                setMessages(oldMessages => {
+                    let newMessages = [...oldMessages]
+                    newMessages.push('Player has ' +  response.data.player.value);
+                    newMessages.push('Dealer is showing ' +  response.data.dealer.shown);                    
+                    return newMessages;
+                });
 
                 
             })
@@ -374,6 +402,11 @@ const BlackJack = (props) => {
                         </ul>
                       
                     </div>
+                </div>
+                <div className="scores-row">
+                    <h1>{dealer.value === 0 ? null : dealer.value}</h1>
+                    <h1>{player.value === 0 ? null : player.value}</h1>
+
                 </div>
                 <div>
                     <div className="players-container">
