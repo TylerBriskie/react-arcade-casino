@@ -125,42 +125,58 @@ const BlackjackPlayer = props => {
 
     // RENDER BUTTONS BASED ON STATE
     const renderButtons = () => {
-
+        console.log(props)
         const buttons = [];
 
         if(props.details.hasBlackjack){
-            console.log('player ' + props.details.name + ' has blackjack');
             return (
                 <div className="player-actions">
                     <h3>Blackjack!</h3>
+                    <Button variant="contained" disabled={props.details.credits < 25 }color="secondary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("PLACE_YOUR_BETS")}>
+                        Deal Again
+                    </Button>
                 </div>
             )
         }
 
         if (props.details.value > 21){
-            console.log('player ' + props.details.seat + ' busts');
             return (
                 <div className="player-actions">
+                    <h2>BUST</h2>
+                    <Button variant="contained" disabled={props.details.credits < 25 }color="secondary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("PLACE_YOUR_BETS")}>
+                        Deal Again
+                    </Button>
                 </div>
             )
         }
 
+        if (props.gamePhase === "PAYOUT"){
+            return (
+                <div className="player-actions">
+                <h2>{props.winner === "DEALER" ? "Dealer Wins" : "Player Wins"}</h2>
+                <Button variant="contained" disabled={props.details.credits < 25 }color="secondary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("PLACE_YOUR_BETS")}>
+                    Deal Again
+                </Button>
+            </div>
+            )
+        }
 
+        
 
         return (
             <div className="player-actions">            
-                <Fab color="primary" aria-label="hit" onClick={() => props.requestCard()}>
+                <Button variant="contained" color="primary" aria-label="hit" className="player-action-button" onClick={() => props.requestCard()}>
                     Hit
-                </Fab>
-                <Fab color="primary" aria-label="stay" onClick={() => props.changeGamePhase("DEALER_TURN")}>
+                </Button>
+                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("DEALER_TURN")}>
                     Stay
-                </Fab>
-                <Fab color="primary" aria-label="stay" disabled={!props.details.canDoubleDown}>
+                </Button>
+                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" disabled={!props.details.canDoubleDown}>
                     Double Down
-                </Fab>
-                <Fab color="primary" aria-label="stay" disabled={!props.details.canSplit}>
+                </Button>
+                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" disabled={!props.details.canSplit}>
                     Split
-                </Fab>
+                </Button>
             </div>
         )
     }
@@ -194,26 +210,31 @@ const BlackjackPlayer = props => {
                         </Alert>
                     </Snackbar> */}
                 </div>
-                
             </div>
          );
     } else {
         return ( 
-            <div className="individual-player-wrapper game-card">
-                <div className="player-details">
-                    
+            <div className="player-row">
+                <div className="individual-player-wrapper game-card">
+                            
+                        
+                    <div className="player-details">
+                        
+                    </div>
+                    <h2>{props.details.name}</h2>
+                    <h3>{props.details.credits} credits</h3>
+                    <div className="cards-container">
+                        {renderCards()}
+                    </div>
+
+
+                        
                 </div>
-                <h2>{props.details.name}</h2>
-                <h3>{props.details.credits} credits</h3>
-                <div className="cards-container">
-                    {renderCards()}
-                </div>
-    
-                {renderScore()}
-    
+
                 {renderButtons()}
-                    
+
             </div>
+
          );
     }
     

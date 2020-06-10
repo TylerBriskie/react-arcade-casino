@@ -25,6 +25,8 @@ const BlackJack = (props) => {
 
     // LOCAL STATE
     const [loading, setLoading] = useState(true);
+    const [winner, setWinner] = useState(null);
+
     const [gameMessages, setMessages] = useState([]);
     const [open, setOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -188,15 +190,17 @@ const BlackJack = (props) => {
             // SO SHE MOVES AT HUMAN SPEED INSTEAD OF COMPUTER SPEED
 
             if (res.data.dealer.cards.length < 3){
+
+                setGamePhase("PAYOUT")
+
+
                 setMessages(oldMessages => {
                     let newMessages = [...oldMessages];
 
                     if (res.data.winner === "DEALER"){
                         newMessages.push('Dealer Wins')
-                        console.log('dealer wins');
                     } else if (res.data.winner === "PLAYER"){
                         newMessages.push("Player Wins");
-                        console.log('player wins');
     
                     }    
                     return newMessages
@@ -225,17 +229,20 @@ const BlackJack = (props) => {
     
                         // LAST CARD, SHOW WINNER
                         if (i === res.data.dealer.cards.length - 1){
+
+                            setGamePhase("PAYOUT")
+
                             setMessages(oldMessages => {
                                 let newMessages = [...oldMessages];
+                                // REMOVE OLD DEALER HAS MESSAGE
                                 newMessages.pop();
                                 newMessages.push('Dealer has ' + res.data.dealer.value);
                                 if (res.data.winner === "DEALER"){
                                     newMessages.push('Dealer Wins')
-                                    console.log('dealer wins');
+                                    setWinner("DEALER")
                                 } else if (res.data.winner === "PLAYER"){
                                     newMessages.push("Player Wins");
-                                    console.log('player wins');
-        
+                                    setWinner("PLAYER")
                                 }
                                 
                                 return newMessages
@@ -248,19 +255,6 @@ const BlackJack = (props) => {
     
                 }
             }
-
-
-            // IF DEALER WINS...
-            // newMessages = [...gameMessages];
-
-            // if (res.data.winner === "DEALER"){
-            //     newMessages.push('Dealer Wins')
-
-            // } else if (res.data.winner === "PLAYER"){
-            //     newMessages.push("Player Wins");
-            // }                
-            // setMessages(newMessages);
-
         }       
     )
     }
@@ -386,6 +380,7 @@ const BlackJack = (props) => {
                     <BlackjackPlayer 
                         details={{...player}} 
                         isPlayerTurn={gamePhase === PLAYER_TURN }
+                        winner={winner}
                         gamePhase={gamePhase}
                         playerReady={playerReady}
                         setWager={setWager}
