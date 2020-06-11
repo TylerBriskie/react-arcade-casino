@@ -3,6 +3,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import MinusIcon from '@material-ui/icons/Remove';
 import Button from '@material-ui/core/Button';
+import Odometer from 'react-odometerjs'
+import 'odometer/themes/odometer-theme-default.css'
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -53,6 +55,11 @@ const BlackjackPlayer = props => {
         setCredits(c => (props.details.credits))
     },[])
 
+    useEffect(() => {
+        if (props.gamePhase === "PAYOUT"){
+            showWinnings()
+        }
+    }, [props.gamePhase])
 
 
     const doubleDownDisabled = () => {
@@ -72,6 +79,14 @@ const BlackjackPlayer = props => {
         props.setWager(raise);
     }
     
+    const showWinnings = () => {
+        if (props.winner === "PLAYER"){
+            let el = document.getElementById('credits-winnings')
+            el.innerHTML = "+"+props.details.wager*2
+        }
+
+    }
+
 
     // LOGIC FOR DISPLAYING PLAYERS CARDS
     const renderCards = () => {
@@ -189,14 +204,23 @@ const BlackjackPlayer = props => {
             <div className="individual-player-wrapper game-card">
                 <div className="player-details">
                     <h2>{props.details.name}</h2>
-                    <h4>Credits: {props.details.credits}</h4>
+                    <h4>Credits: <Odometer 
+                                format=",ddd"
+                                duration={500}
+                                animation="count"
+                                value={props.details.credits}
+
+                            /></h4>
                 </div>
 
                 <div>
                     <h4>Current Bet</h4>
                     <div className="place-your-bet-buttons">
                         <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(false)}><MinusIcon /></Fab>
-                        <h2>{props.details.wager}</h2>
+                        <h2>
+                            
+                            {props.details.wager}
+                        </h2>
                         <Fab color="primary" aria-label="decrease bet" disabled={props.details.ready} onClick={() => modifyWager(true)}><AddIcon /></Fab>
                     </div>
                 </div>
@@ -222,7 +246,10 @@ const BlackjackPlayer = props => {
                             
                         </div>
                         <h2>{props.details.name}</h2>
-                        <h3>{props.details.credits} credits</h3>
+                        <h3>
+                            <Odometer format="dddd" duration={500} value={props.details.credits}/> credits 
+                            <span id="credits-winnings"></span>
+                        </h3>
                         <div className="cards-container">
                             {renderCards()}
                         </div>

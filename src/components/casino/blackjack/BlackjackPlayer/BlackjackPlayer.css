@@ -63,3 +63,7 @@
 .player-action-button {
     width: 200px;
 }
+
+#credits-winnings {
+    color: green;
+}
