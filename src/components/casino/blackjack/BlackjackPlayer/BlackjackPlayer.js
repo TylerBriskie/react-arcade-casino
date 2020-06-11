@@ -125,7 +125,6 @@ const BlackjackPlayer = props => {
 
     // RENDER BUTTONS BASED ON STATE
     const renderButtons = () => {
-        console.log(props)
         const buttons = [];
 
         if(props.details.hasBlackjack){

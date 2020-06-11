@@ -49,8 +49,7 @@ const BlackJack = (props) => {
 
     // USEEFFECT - COMPONENT DID MOUNT
     useEffect(() => {
-        console.log('LOADING NEW BLACKJACK GAME');
-        console.log(state)
+
         if (state.token){
             axios.get(process.env.REACT_APP_API_BASE_URL+'users/player-info?id='+ state.id)
                 .then(res => {
@@ -74,7 +73,6 @@ const BlackJack = (props) => {
     
     // PLAYER DID UPDATE
     useEffect(() => {
-        console.log('player updated: ', player)
         // PLAYER BUSTS, DEALER TURN
         if (player.value > 21){
             setGamePhase(DEALER_TURN);
@@ -94,12 +92,23 @@ const BlackJack = (props) => {
 
         }
 
+        if (gamePhase === PAYOUT){
+            axios.get(process.env.REACT_APP_API_BASE_URL+'users/player-info?id='+ state.id)
+                .then(res => {
+                    updatePlayer( p => ({
+                        ...p,
+                        credits: res.data.credits,
+                    }))
+                });
+        }
+
         if (gamePhase === PLACE_YOUR_BETS){
             setMessages([])
             updatePlayer(oldPlayer => {
                 let newPlayer = {...oldPlayer}
                 newPlayer.cards = [];
                 newPlayer.value = 0;
+                newPlayer.credits -= newPlayer.wager;
                 return newPlayer
             })
 
@@ -211,23 +220,23 @@ const BlackJack = (props) => {
 
             if (res.data.dealer.cards.length < 3){
 
-                setGamePhase("PAYOUT")
-
-
                 setMessages(oldMessages => {
                     let newMessages = [...oldMessages];
 
                     if (res.data.winner === "DEALER"){
                         newMessages.push('Dealer Wins')
+                        setWinner("DEALER")
+
                     } else if (res.data.winner === "PLAYER"){
                         newMessages.push("Player Wins");
+                        setWinner("PLAYER")
     
                     }    
                     return newMessages
                 });
 
+                setGamePhase("PAYOUT")
 
-            
             } else {
 
                 for (let i = 2; i < res.data.dealer.cards.length; i++){
@@ -250,7 +259,6 @@ const BlackJack = (props) => {
                         // LAST CARD, SHOW WINNER
                         if (i === res.data.dealer.cards.length - 1){
 
-                            setGamePhase("PAYOUT")
 
                             setMessages(oldMessages => {
                                 let newMessages = [...oldMessages];
@@ -267,6 +275,9 @@ const BlackJack = (props) => {
                                 
                                 return newMessages
                             })
+
+                            setGamePhase("PAYOUT")
+
            
                         }
     
