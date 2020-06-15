@@ -8,22 +8,52 @@ const BlackjackDealer = props => {
 
 
     const renderDealerCards = () => {
-   
-        let cardImgs =  props.details.cards.map(c => {
-            
+        let collapseCards = props.details.cards.length > 6;
+        let cardCount = 0;
 
-                if (props.details.cards.indexOf(c) === 0){
-                    if (props.gamePhase === "PLAYER_TURN"){
-                        return <img key={c} src={CardBack} alt="Playing Card back"></img>
+        let cardImgs = props.details.cards.map(c => {
+            if (cardCount === 0 ){
+                cardCount++;
+                if (props.gamePhase === "PLAYER_TURN"){
+                    return <img key={cardCount} src={CardBack} alt="Playing Card back"></img>
+                } else {
+                    return <img key={cardCount} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
+                }
+            } else {
+                cardCount++;
+                if (collapseCards){
+                    if (props.details.cards.indexOf(c) < (props.details.cards.length - 4) ){
+                        return <img key={cardCount} className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
                     } else {
-                        return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
+                        return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+        
                     }
                 } else {
-                    return <img className="not-first-card" key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
-    
+                   
+                    return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+        
+                    
                 }
+            }
+            
 
+        
         })
+        // let cardImgs =  props.details.cards.map(c => {
+            
+
+        //         if (props.details.cards.indexOf(c) === 0){
+        //             if (props.gamePhase === "PLAYER_TURN"){
+        //                 return <img key={c} src={CardBack} alt="Playing Card back"></img>
+        //             } else {
+        //                 return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
+        //             }
+        //         } else {
+        //             return <img className="not-first-card" key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
+    
+        //         }
+
+        // })
         return cardImgs;
     }
 

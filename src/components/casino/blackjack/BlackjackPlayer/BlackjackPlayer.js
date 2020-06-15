@@ -97,20 +97,20 @@ const BlackjackPlayer = props => {
         let cardImgs = props.details.cards.map(c => {
             if (cardCount === 0 ){
                 cardCount++;
-                return <img src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                return <img key={cardCount} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
 
             } else {
                 cardCount++;
                 if (collapseCards){
                     if (props.details.cards.indexOf(c) < (props.details.cards.length - 4) ){
-                        return <img className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                        return <img key={cardCount} className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
                     } else {
-                        return <img className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                        return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
         
                     }
                 } else {
                    
-                    return <img className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                    return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
         
                     
                 }

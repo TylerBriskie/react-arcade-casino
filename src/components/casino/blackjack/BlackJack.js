@@ -279,7 +279,7 @@ const BlackJack = (props) => {
            
                         }
     
-                    }, 500);
+                    }, 1000);
     
     
                 }
@@ -406,7 +406,7 @@ const BlackJack = (props) => {
                         <h2>{getGamePhaseString()}</h2>
                         <ul>
                             {gameMessages.map((m) => {
-                                return <li>
+                                return <li key={gameMessages.indexOf(m)}>
                                     {m}
                                 </li>
                             })}
