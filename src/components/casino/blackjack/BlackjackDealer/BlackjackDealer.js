@@ -14,12 +14,12 @@ const BlackjackDealer = props => {
 
                 if (props.details.cards.indexOf(c) === 0){
                     if (props.gamePhase === "PLAYER_TURN"){
-                        return <img key={c} src={CardBack}></img>
+                        return <img key={c} src={CardBack} alt="Playing Card back"></img>
                     } else {
-                        return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                        return <img key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
                     }
                 } else {
-                    return <img className="not-first-card" key={c} src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                    return <img className="not-first-card" key={c} src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
     
                 }
 

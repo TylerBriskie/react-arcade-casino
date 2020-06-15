@@ -1,6 +1,6 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, { useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import axios from 'axios';
 
@@ -20,11 +20,10 @@ const PAYOUT = "PAYOUT";
 
 const BlackJack = (props) => {
     // GLOBAL STATE
-    const {state, dispatch} = useStore();
+    const {state} = useStore();
 
 
     // LOCAL STATE
-    const [loading, setLoading] = useState(true);
     const [winner, setWinner] = useState(null);
 
     const [gameMessages, setMessages] = useState([]);
@@ -53,7 +52,7 @@ const BlackJack = (props) => {
         if (state.token){
             axios.get(process.env.REACT_APP_API_BASE_URL+'users/player-info?id='+ state.id)
                 .then(res => {
-                    console.log('got player: ', res);
+                    // console.log('got player: ', res);
                     updatePlayer( p => ({
                         name: res.data.display_name,
                         credits: res.data.credits,
@@ -67,9 +66,9 @@ const BlackJack = (props) => {
                 });
           
 
-            console.log(player);
+            // console.log(player);
         }
-    }, [])
+    }, [state])
     
     // PLAYER DID UPDATE
     useEffect(() => {
@@ -86,6 +85,7 @@ const BlackJack = (props) => {
 
     // WATCH GAME PHASE
     useEffect(() => {
+        console.log("hello")
 
         if (gamePhase === DEALER_TURN){
             dealDealerCards();
@@ -121,7 +121,7 @@ const BlackJack = (props) => {
 
         }
 
-    }, [gamePhase]);
+    }, [gamePhase, state.id]);
 
 
 
@@ -195,7 +195,7 @@ const BlackJack = (props) => {
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/dealer-turn', {})
         .then(res => {
-            console.log('response from dealer-turn', res);
+            // console.log('response from dealer-turn', res);
             // INITIAL DEALER CARD FLIP...
             // REPLACE PLACEHOLDER CARD WITH REAL FIRST CARD
 
@@ -319,7 +319,7 @@ const BlackJack = (props) => {
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/newHand', postData)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 setGamePhase(PLAYER_TURN);
                 updatePlayer({
                     ...player,
@@ -357,7 +357,7 @@ const BlackJack = (props) => {
             id: player.id,
         }
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/hitme', postBody).then(async (response) => {
-            console.log(response.data);
+            // console.log(response.data);
  
             updatePlayer({...player, value: response.data.player.value, cards: response.data.player.cards})
 

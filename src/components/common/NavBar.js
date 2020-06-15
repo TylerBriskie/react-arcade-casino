@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 
@@ -10,15 +9,6 @@ import HeaderLogo from '../../CasinoHeaderLogo.png';
 import { useStore } from "../../contexts/store";
 
 const NavBar = (props) => {
-    const useStyles = makeStyles({
-        buttonStyle: {
-            color: 'red',
-        }
-    })
-    
-    
-    const classes = useStyles();
-    
     
 
     const {state, dispatch} = useStore();
