@@ -94,6 +94,7 @@ const BlackJack = (props) => {
         if (gamePhase === PAYOUT){
             axios.get(process.env.REACT_APP_API_BASE_URL+'users/player-info?id='+ state.id)
                 .then(res => {
+                    // GET NEW CREDIT AMOUNT FROM SERVER, WHERE ITS ALREADY BEEN UPDATED
                     updatePlayer( p => ({
                         ...p,
                         credits: res.data.credits,
@@ -103,11 +104,19 @@ const BlackJack = (props) => {
 
         if (gamePhase === PLACE_YOUR_BETS){
             setMessages([])
+
             updatePlayer(oldPlayer => {
                 let newPlayer = {...oldPlayer}
                 newPlayer.cards = [];
                 newPlayer.value = 0;
-                newPlayer.credits -= newPlayer.wager;
+                
+                if (newPlayer.credits - newPlayer.wager > 0){
+                    newPlayer.credits -= newPlayer.wager;
+
+                } else {
+                    newPlayer.wager = 0;
+                }
+
                 return newPlayer
             })
 
@@ -194,7 +203,7 @@ const BlackJack = (props) => {
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/dealer-turn', {})
         .then(res => {
-            // console.log('response from dealer-turn', res);
+            console.log('response from dealer-turn', res);
             // INITIAL DEALER CARD FLIP...
             // REPLACE PLACEHOLDER CARD WITH REAL FIRST CARD
 
@@ -243,7 +252,7 @@ const BlackJack = (props) => {
 
             } else {
 
-                for (let i = 2; i < res.data.dealer.cards.length; ){
+                for (let i = 2; i < res.data.dealer.cards.length; ++i){
 
 
                     setTimeout(() => {
@@ -265,6 +274,9 @@ const BlackJack = (props) => {
                                 } else if (res.data.winner === "PLAYER"){
                                     newMessages.push("Player Wins");
                                     setWinner("PLAYER")
+                                } else if (res.data.winner === "PUSH"){
+                                    newMessages.push("Player Pushes");
+                                    setWinner("PUSH");
                                 }
                                 
                                 return newMessages
@@ -286,17 +298,17 @@ const BlackJack = (props) => {
 
            
                         } else {
-                                                    // SHOW NEW CARD                    
+                        // SHOW NEW CARD                    
 
                         updateDealer(oldDealer => {
                                 
-                            return {
-                                ...oldDealer,
-                                cards: [...oldDealer.cards, res.data.dealer.cards[i]]
-                            }
+                                    return {
+                                        ...oldDealer,
+                                        cards: [...oldDealer.cards, res.data.dealer.cards[i]]
+                                    }
 
-                        }
-                    )
+                                }
+                            )
                         }
     
                     }, 500);

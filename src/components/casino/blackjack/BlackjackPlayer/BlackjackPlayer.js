@@ -80,9 +80,12 @@ const BlackjackPlayer = props => {
     }
     
     const showWinnings = () => {
-        if (props.winner !== "DEALER"){
+        if (props.winner === "PLAYER"){
             let el = document.getElementById('credits-winnings')
             el.innerHTML = "+"+props.details.wager*2
+        } else if ( props.winner === "PUSH"){
+            let el = document.getElementById('credits-winnings')
+            el.innerHTML = "+"+props.details.wager
         }
 
     }
