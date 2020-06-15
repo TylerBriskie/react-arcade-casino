@@ -80,7 +80,7 @@ const BlackjackPlayer = props => {
     }
     
     const showWinnings = () => {
-        if (props.winner === "PLAYER"){
+        if (props.winner !== "DEALER"){
             let el = document.getElementById('credits-winnings')
             el.innerHTML = "+"+props.details.wager*2
         }
@@ -167,7 +167,10 @@ const BlackjackPlayer = props => {
         if (props.gamePhase === "PAYOUT"){
             return (
                 <div className="player-actions">
-                <h2>{props.winner === "DEALER" ? "Dealer Wins" : "Player Wins"}</h2>
+                <h2>{
+                    // props.winner === "DEALER" ? "Dealer Wins" : "Player Wins"
+                    
+                }</h2>
                 <Button variant="contained" disabled={props.details.credits < 25 }color="secondary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("PLACE_YOUR_BETS")}>
                     Deal Again
                 </Button>

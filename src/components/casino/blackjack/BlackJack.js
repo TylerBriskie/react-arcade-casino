@@ -71,21 +71,22 @@ const BlackJack = (props) => {
     }, [state])
     
     // PLAYER DID UPDATE
-    useEffect(() => {
-        // PLAYER BUSTS, DEALER TURN
-        if (player.value > 21){
-            setGamePhase(DEALER_TURN);
-        }
+    // useEffect(() => {
+    //     // PLAYER BUSTS, DEALER TURN
+    //     if (player.value > 21){
+    //         setGamePhase(DEALER_TURN);
+    //     }
 
-        if (player.hasBlackJack){
-            alert('blackjack!');
-            setGamePhase(DEALER_TURN);
-        }
-    }, [player])
+    //     if (player.hasBlackJack){
+    //         alert('blackjack!');
+    //         setGamePhase(DEALER_TURN);
+    //     }
+    // }, [player])
 
     // WATCH GAME PHASE
     useEffect(() => {
         if (gamePhase === DEALER_TURN){
+            console.log("DEALER TURN")
             dealDealerCards();
 
         }
@@ -197,6 +198,7 @@ const BlackJack = (props) => {
             // INITIAL DEALER CARD FLIP...
             // REPLACE PLACEHOLDER CARD WITH REAL FIRST CARD
 
+            console.log(res);
             updateDealer( oldDealer => ({
                 ...oldDealer,
                 value: res.data.dealer.initialScore,
@@ -229,7 +231,11 @@ const BlackJack = (props) => {
                         newMessages.push("Player Wins");
                         setWinner("PLAYER")
     
-                    }    
+                    } else if (res.data.winner === "PUSH"){
+                        newMessages.push("Player Pushes");
+                        setWinner("PUSH")
+    
+                    }
                     return newMessages
                 });
 
@@ -237,22 +243,12 @@ const BlackJack = (props) => {
 
             } else {
 
-                for (let i = 2; i < res.data.dealer.cards.length; i++){
+                for (let i = 2; i < res.data.dealer.cards.length; ){
 
 
                     setTimeout(() => {
     
-                        // SHOW NEW CARD                    
 
-                        updateDealer(oldDealer => {
-                                
-                                return {
-                                    ...oldDealer,
-                                    cards: [...oldDealer.cards, res.data.dealer.cards[i]]
-                                }
-
-                            }
-                        )
     
                         // LAST CARD, SHOW WINNER
                         if (i === res.data.dealer.cards.length - 1){
@@ -274,12 +270,36 @@ const BlackJack = (props) => {
                                 return newMessages
                             })
 
+                            
+                            updateDealer(oldDealer => {
+                                        
+                                    return {
+                                        ...oldDealer,
+                                        value: res.data.dealer.value > 21 ? "BUST" : res.data.dealer.value,
+                                        cards: [...oldDealer.cards, res.data.dealer.cards[i]]
+                                    }
+
+                                }
+                            )
+
                             setGamePhase("PAYOUT")
 
            
+                        } else {
+                                                    // SHOW NEW CARD                    
+
+                        updateDealer(oldDealer => {
+                                
+                            return {
+                                ...oldDealer,
+                                cards: [...oldDealer.cards, res.data.dealer.cards[i]]
+                            }
+
+                        }
+                    )
                         }
     
-                    }, 1000);
+                    }, 500);
     
     
                 }
@@ -406,7 +426,7 @@ const BlackJack = (props) => {
                         <h2>{getGamePhaseString()}</h2>
                         <ul>
                             {gameMessages.map((m) => {
-                                return <li key={gameMessages.indexOf(m)}>
+                                return <li key={"msg-"+gameMessages.indexOf(m)}>
                                     {m}
                                 </li>
                             })}

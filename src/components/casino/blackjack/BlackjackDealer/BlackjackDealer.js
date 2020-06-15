@@ -23,14 +23,14 @@ const BlackjackDealer = props => {
                 cardCount++;
                 if (collapseCards){
                     if (props.details.cards.indexOf(c) < (props.details.cards.length - 4) ){
-                        return <img key={cardCount} className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                        return <img key={cardCount} className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png` } alt="playing card"></img>
                     } else {
-                        return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                        return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`} alt="playing card"></img>
         
                     }
                 } else {
                    
-                    return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
+                    return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`} alt="playing card"></img>
         
                     
                 }
