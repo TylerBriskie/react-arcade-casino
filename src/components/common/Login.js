@@ -60,7 +60,6 @@ const Login = () => {
                         setSubmitting(false);
 
                         const decoded = jwt_decode(response.data);
-                        console.log(decoded);
 
                         dispatch({
                             type: "USER_LOGIN",

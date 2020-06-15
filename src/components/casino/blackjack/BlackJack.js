@@ -85,8 +85,6 @@ const BlackJack = (props) => {
 
     // WATCH GAME PHASE
     useEffect(() => {
-        console.log("hello")
-
         if (gamePhase === DEALER_TURN){
             dealDealerCards();
 
@@ -375,6 +373,8 @@ const BlackJack = (props) => {
                 return "Dealer Turn";
             case PAYOUT:
                 return "Game Over";
+            default:
+                return "Game Over"
                     
         }
     }

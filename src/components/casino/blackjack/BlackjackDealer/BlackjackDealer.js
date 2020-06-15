@@ -30,7 +30,6 @@ const BlackjackDealer = props => {
 
     const renderDealerScore = () => {
         if (props.details.value > 21){
-            console.log('Dealer Busts');
             return <h3>Dealer Busts!</h3>
         } else {
             return <h3>{props.details.value}</h3>

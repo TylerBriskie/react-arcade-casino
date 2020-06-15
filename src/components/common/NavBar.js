@@ -28,7 +28,7 @@ const NavBar = (props) => {
             <div className="header-logo">
                 
                 <Link to="/" >
-                    <img src={HeaderLogo}/>
+                    <img src={HeaderLogo} alt="website logo"/>
                 </Link>
                     
             </div>

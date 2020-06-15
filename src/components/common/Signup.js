@@ -3,14 +3,13 @@ import { useHistory } from 'react-router-dom'
 import {TextField, Button, Box} from '@material-ui/core';
 
 
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
 // LOCAL FILES
 import "./Signup.css";
 import { useStore } from "../../contexts/store";
 
-const jwt_decode = require('jwt-decode');
 const axios = require('axios');
 
 
@@ -94,7 +93,7 @@ const Signup = (props) => {
                                 const postData = data;
                                 console.log(postData);
         
-                                let currentComponent = this;
+                                // let currentComponent = this;
                                 
                                 {/*
                                     POST NEW USER TO SERVER
