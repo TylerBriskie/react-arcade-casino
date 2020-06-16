@@ -211,11 +211,10 @@ const BlackJack = (props) => {
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/dealer-turn', {})
         .then(res => {
-            console.log('response from dealer-turn', res);
+            // console.log('response from dealer-turn', res);
             // INITIAL DEALER CARD FLIP...
             // REPLACE PLACEHOLDER CARD WITH REAL FIRST CARD
 
-            console.log(res);
             updateDealer( oldDealer => ({
                 ...oldDealer,
                 value: res.data.dealer.initialScore,
@@ -227,7 +226,12 @@ const BlackJack = (props) => {
             setMessages(oldMessages => {
                     let newMessages = [...oldMessages];
                     newMessages.push("Dealer Reveals " + res.data.dealer.revealedCard);
-                    newMessages.push("Dealer Has " + res.data.dealer.initialScore);
+
+                    if (res.data.dealer.hasBlackjack){
+                        newMessages.push('Dealer has Blackjack!');
+                    } else {
+                        newMessages.push("Dealer Has an " + res.data.dealer.initialScore);
+                    }
                     return newMessages
             });
 
@@ -241,15 +245,24 @@ const BlackJack = (props) => {
                     let newMessages = [...oldMessages];
 
                     if (res.data.winner === "DEALER"){
-                        newMessages.push('Dealer Wins')
+                        newMessages.push('The house wins...')
+                        newMessages.push(player.name + ' lost ' + player.wager + " credits.")
                         setWinner("DEALER")
 
                     } else if (res.data.winner === "PLAYER"){
-                        newMessages.push("Player Wins");
+                        newMessages.push(player.name + " wins!");
+                        if (player.didDoubleDown){
+                            newMessages.push(player.name + ' wins ' + player.wager*4 + " credits.")
+                        } else {
+                            newMessages.push(player.name + ' wins ' + player.wager*2 + " credits.")
+                        }
+ 
                         setWinner("PLAYER")
     
                     } else if (res.data.winner === "PUSH"){
-                        newMessages.push("Player Pushes");
+                        newMessages.push(player.name + " pushes");
+                        newMessages.push(player.name + ' gets back their wager of ' + player.wager + ' credits.')
+
                         setWinner("PUSH")
     
                     }
@@ -337,7 +350,7 @@ const BlackJack = (props) => {
 
         setMessages(oldMessages => {
             let newMessages = [...oldMessages];
-            newMessages.push("Player Bets " + player.wager);
+            newMessages.push(player.name + " Bets " + player.wager);
             newMessages.push("Dealing cards...");
 
             return newMessages
@@ -357,27 +370,30 @@ const BlackJack = (props) => {
 
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/new-hand', postData)
             .then((response) => {
-                // console.log(response);
+                console.log(response);
                 setGamePhase(PLAYER_TURN);
-                updatePlayer({
-                    ...player,
+                
+                updatePlayer(oldPlayer => ({
+                    ...oldPlayer,
                     cards: response.data.player.cards,
                     value: response.data.player.value,
                     hasBlackJack: response.data.player.hasBlackJack,
                     canSplit: response.data.player.canSplit,
                     canDoubleDown: response.data.player.canDoubleDown
-                });
+                }));
                 updateDealer({
                     ...dealer,
                     cards: ['HIDDEN_CARD', response.data.dealer.cards],
                 })
 
+                console.log('new hand dealt.  player object - ' , player);
+
                 setMessages(oldMessages => {
                     let newMessages = [...oldMessages]
-                    if (player.hasBlackjack){
-                        newMessages.push('Player has Blackjack!');
+                    if (response.data.player.hasBlackjack){
+                        newMessages.push(player.name + ' has Blackjack!');
                     } else {
-                        newMessages.push('Player has ' +  response.data.player.value);
+                        newMessages.push(player.name + ' has ' +  response.data.player.value);
                     }
                     newMessages.push('Dealer is showing ' +  response.data.dealer.shown);                    
                     return newMessages;
@@ -423,7 +439,7 @@ const BlackJack = (props) => {
             updatePlayer(oldPlayer => {
                 return {...oldPlayer, value: response.data.player.value, cards: response.data.player.cards}
             })
-            setMessages(oldMessages => ([...oldMessages, "Player Doubled Down.  Player Score is " + response.data.player.value]))
+            setMessages(oldMessages => ([...oldMessages, player.name + " Doubled Down.  Player Score is " + response.data.player.value]))
             changeGamePhase(DEALER_TURN);
         })
     }
@@ -434,7 +450,7 @@ const BlackJack = (props) => {
     // PLAYER STANDS
     const endPlayerTurn = (player) => {
         console.log(player)
-        console.log("player " + player.id + " stands");
+        console.log(player.name +  " stands");
         // WHEN MULTIPLAYER IS IMPLEMENTED, MAKE IT NEXT PLAYERS TURN.  FOR NOW, SET IT TO DEALERS TURN
         changeGamePhase(DEALER_TURN);
     }
