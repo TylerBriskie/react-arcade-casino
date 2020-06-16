@@ -75,7 +75,6 @@ const BlackjackPlayer = props => {
     }
 
     const modifyWager = raise => {
-        
         props.setWager(raise);
     }
     
@@ -85,7 +84,7 @@ const BlackjackPlayer = props => {
             el.innerHTML = "+"+props.details.wager*2
         } else if ( props.winner === "PUSH"){
             let el = document.getElementById('credits-winnings')
-            el.innerHTML = "+"+props.details.wager
+            el.innerHTML = "+" + props.details.wager
         }
 
     }
@@ -109,13 +108,10 @@ const BlackjackPlayer = props => {
                         return <img key={cardCount} className="collapsed-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
                     } else {
                         return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
-        
+
                     }
                 } else {
-                   
                     return <img key={cardCount} className="not-first-card" src={`https://deckofcardsapi.com/static/img/${c}.png`}></img>
-        
-                    
                 }
             }
             

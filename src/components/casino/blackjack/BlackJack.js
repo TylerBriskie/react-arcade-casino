@@ -347,7 +347,7 @@ const BlackJack = (props) => {
             player
         };
 
-        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/newHand', postData)
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/new-hand', postData)
             .then((response) => {
                 // console.log(response);
                 setGamePhase(PLAYER_TURN);
@@ -386,7 +386,7 @@ const BlackJack = (props) => {
         const postBody = {
             id: player.id,
         }
-        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/hitme', postBody).then(async (response) => {
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/hit-me', postBody).then(async (response) => {
             // console.log(response.data);
  
             updatePlayer({...player, value: response.data.player.value, cards: response.data.player.cards})
