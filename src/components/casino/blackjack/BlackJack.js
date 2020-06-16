@@ -34,7 +34,8 @@ const BlackJack = (props) => {
         cards: [],
         value: 0,
         wager: 0,
-        credits: 0,
+        credits: 0,            
+        didDoubleDown: false,
         hasBlackJack: false,
         canSplit: false,
         canDoubleDown: false
@@ -59,6 +60,7 @@ const BlackJack = (props) => {
                         wager: 0,
                         cards: [],
                         value: 0,
+                        didDoubleDown: false,
                         hasBlackJack: false,
                         canSplit: false,
                         canDoubleDown: false
@@ -107,9 +109,15 @@ const BlackJack = (props) => {
 
             updatePlayer(oldPlayer => {
                 let newPlayer = {...oldPlayer}
+                
                 newPlayer.cards = [];
                 newPlayer.value = 0;
-                
+
+                newPlayer.didDoubleDown = false;
+                newPlayer.canSplit = false;
+                newPlayer.canDoubleDown = false;
+                newPlayer.hasBlackJack = false;
+
                 if (newPlayer.credits - newPlayer.wager > 0){
                     newPlayer.credits -= newPlayer.wager;
 
@@ -258,7 +266,7 @@ const BlackJack = (props) => {
                     setTimeout(() => {
     
 
-    
+                        console.log('card '+ i);
                         // LAST CARD, SHOW WINNER
                         if (i === res.data.dealer.cards.length - 1){
 
@@ -311,7 +319,7 @@ const BlackJack = (props) => {
                             )
                         }
     
-                    }, 500);
+                    }, 1200);
     
     
                 }
@@ -366,7 +374,11 @@ const BlackJack = (props) => {
 
                 setMessages(oldMessages => {
                     let newMessages = [...oldMessages]
-                    newMessages.push('Player has ' +  response.data.player.value);
+                    if (player.hasBlackjack){
+                        newMessages.push('Player has Blackjack!');
+                    } else {
+                        newMessages.push('Player has ' +  response.data.player.value);
+                    }
                     newMessages.push('Dealer is showing ' +  response.data.dealer.shown);                    
                     return newMessages;
                 });
@@ -382,18 +394,51 @@ const BlackJack = (props) => {
 
 
     // REQUEST A CARD
-    const requestCard = () => {
+    const requestCard = (doubleDown) => {
+
         const postBody = {
             id: player.id,
         }
         axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/hit-me', postBody).then(async (response) => {
-            // console.log(response.data);
  
-            updatePlayer({...player, value: response.data.player.value, cards: response.data.player.cards})
-
+            updatePlayer(oldPlayer => {
+                return {...oldPlayer, value: response.data.player.value, cards: response.data.player.cards}
+            })
         })
-
     }
+
+    // DOUBLE DOWN
+    const doubleDown = () => {
+        updatePlayer(oldPlayer => ({
+            ...oldPlayer,
+            credits: oldPlayer.credits - oldPlayer.wager,
+            didDoubleDown: true,
+        }))
+        const postBody = {
+            id: state.id,
+        }
+
+
+        axios.post(process.env.REACT_APP_API_BASE_URL+'blackjack/double-down', postBody).then(async (response) => { 
+            updatePlayer(oldPlayer => {
+                return {...oldPlayer, value: response.data.player.value, cards: response.data.player.cards}
+            })
+            setMessages(oldMessages => ([...oldMessages, "Player Doubled Down.  Player Score is " + response.data.player.value]))
+            changeGamePhase(DEALER_TURN);
+        })
+    }
+
+
+    
+
+    // PLAYER STANDS
+    const endPlayerTurn = (player) => {
+        console.log(player)
+        console.log("player " + player.id + " stands");
+        // WHEN MULTIPLAYER IS IMPLEMENTED, MAKE IT NEXT PLAYERS TURN.  FOR NOW, SET IT TO DEALERS TURN
+        changeGamePhase(DEALER_TURN);
+    }
+
 
     const getGamePhaseString = () => {
         switch (gamePhase){
@@ -459,7 +504,9 @@ const BlackJack = (props) => {
                         winner={winner}
                         gamePhase={gamePhase}
                         playerReady={playerReady}
+                        endPlayerTurn={endPlayerTurn}
                         setWager={setWager}
+                        doubleDown={doubleDown}
                         requestCard={requestCard}
                         changeGamePhase={changeGamePhase}
                     />

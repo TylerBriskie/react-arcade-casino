@@ -79,12 +79,16 @@ const BlackjackPlayer = props => {
     }
     
     const showWinnings = () => {
+        let winningsAmt = props.details.wager;
+        if (props.details.didDoubleDown){
+            winningsAmt *= 2
+        }
         if (props.winner === "PLAYER"){
             let el = document.getElementById('credits-winnings')
-            el.innerHTML = "+"+props.details.wager*2
+            el.innerHTML = "+" + winningsAmt*2
         } else if ( props.winner === "PUSH"){
             let el = document.getElementById('credits-winnings')
-            el.innerHTML = "+" + props.details.wager
+            el.innerHTML = "+" + winningsAmt
         }
 
     }
@@ -184,10 +188,10 @@ const BlackjackPlayer = props => {
                 <Button variant="contained" color="primary" aria-label="hit" className="player-action-button" onClick={() => props.requestCard()}>
                     Hit
                 </Button>
-                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" onClick={() => props.changeGamePhase("DEALER_TURN")}>
+                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" onClick={() => props.endPlayerTurn(props.details)}>
                     Stay
                 </Button>
-                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" disabled={!props.details.canDoubleDown}>
+                <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" disabled={!props.details.canDoubleDown} onClick={() => props.doubleDown()} >
                     Double Down
                 </Button>
                 <Button variant="contained" color="primary" aria-label="stay" className="player-action-button" disabled={!props.details.canSplit}>
