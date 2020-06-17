@@ -1,0 +1,30 @@
+#guest-login-page {
+    
+}
+
+h4 {
+    margin: 16px;
+}
+
+.button-row {
+ width: 300px;
+ justify-content: space-around;
+}
+
+.button-row button {
+    margin: 0 6px;
+}
+
+button.guest-login-button {
+    width: 300px;
+    margin-top: 16px;
+}
+
+button a {
+    color: white;
+}
+
+button.outlined {
+    margin-top: 20px;
+    border: solid #673AB7 1px;
+}

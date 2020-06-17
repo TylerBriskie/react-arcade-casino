@@ -10,6 +10,7 @@ import BlackjackPlayer from './BlackjackPlayer/BlackjackPlayer';
 import './BlackJack.css';
 import BlackjackDealer from './BlackjackDealer/BlackjackDealer';
 import { useStore } from "../../../contexts/store";
+import GuestLogin from '../../common/GuestLogin';
 
 
 const PLACE_YOUR_BETS = "PLACE_YOUR_BETS";
@@ -20,9 +21,9 @@ const PAYOUT = "PAYOUT";
 
 const BlackJack = (props) => {
     // GLOBAL STATE
-    const {state} = useStore();
+    const {state, dispatch} = useStore();
 
-
+    console.log(state);
     // LOCAL STATE
     const [winner, setWinner] = useState(null);
 
@@ -485,54 +486,64 @@ const BlackJack = (props) => {
         },
         }))(Button);
 
-        return (
-            <div className="page-container" id="blackjack-game-container">
-                <div className="dealer-row">
-                    <div className="dealer-container" style={{width: '50%'}}>
-                        <BlackjackDealer 
-                            details={dealer}                 
+
+        if (state.id === ""){
+            return (
+                <GuestLogin />
+
+            )
+        } else {
+            return (
+                <div className="page-container" id="blackjack-game-container">
+                    <div className="dealer-row">
+                        <div className="dealer-container" style={{width: '50%'}}>
+                            <BlackjackDealer 
+                                details={dealer}                 
+                                gamePhase={gamePhase}
+                                dealerTurn={gamePhase === DEALER_TURN} 
+                            />
+                        </div>
+                        <div className="game-status" style={{width: '50%'}}>
+                            <h2>{getGamePhaseString()}</h2>
+                            <ul>
+                                {gameMessages.map((m) => {
+                                    return <li key={"msg-"+gameMessages.indexOf(m)}>
+                                        {m}
+                                    </li>
+                                })}
+                            </ul>
+                          
+                        </div>
+                    </div>
+                    <div className="scores-row">
+                        <h1>{dealer.value === 0 ? null : dealer.value}</h1>
+                        <h1>{player.value === 0 ? null : player.value}</h1>
+    
+                    </div>
+                    <div>
+                        <div className="players-container">
+                        <BlackjackPlayer 
+                            details={{...player}} 
+                            isPlayerTurn={gamePhase === PLAYER_TURN }
+                            winner={winner}
                             gamePhase={gamePhase}
-                            dealerTurn={gamePhase === DEALER_TURN} 
+                            playerReady={playerReady}
+                            endPlayerTurn={endPlayerTurn}
+                            setWager={setWager}
+                            doubleDown={doubleDown}
+                            requestCard={requestCard}
+                            changeGamePhase={changeGamePhase}
                         />
+    
+                        </div>
+    
                     </div>
-                    <div className="game-status" style={{width: '50%'}}>
-                        <h2>{getGamePhaseString()}</h2>
-                        <ul>
-                            {gameMessages.map((m) => {
-                                return <li key={"msg-"+gameMessages.indexOf(m)}>
-                                    {m}
-                                </li>
-                            })}
-                        </ul>
-                      
-                    </div>
+    
                 </div>
-                <div className="scores-row">
-                    <h1>{dealer.value === 0 ? null : dealer.value}</h1>
-                    <h1>{player.value === 0 ? null : player.value}</h1>
+            )
+        }
 
-                </div>
-                <div>
-                    <div className="players-container">
-                    <BlackjackPlayer 
-                        details={{...player}} 
-                        isPlayerTurn={gamePhase === PLAYER_TURN }
-                        winner={winner}
-                        gamePhase={gamePhase}
-                        playerReady={playerReady}
-                        endPlayerTurn={endPlayerTurn}
-                        setWager={setWager}
-                        doubleDown={doubleDown}
-                        requestCard={requestCard}
-                        changeGamePhase={changeGamePhase}
-                    />
-
-                    </div>
-
-                </div>
-
-            </div>
-        )
+        
     }
 
 
